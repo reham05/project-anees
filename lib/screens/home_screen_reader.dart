@@ -1,4 +1,4 @@
-import 'package:anees/screens/login_screen.dart';
+
 import 'package:anees/screens/settings_screen.dart';
 import 'package:anees/screens/widgets/txtformfield.dart';
 import 'package:anees/utils/colors.dart';
@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../utils/image_util.dart';
+
 
 class HomeScreenReader extends StatefulWidget {
   const HomeScreenReader({super.key});
@@ -483,7 +483,7 @@ class _HomeScreenReaderState extends State<HomeScreenReader> {
                                                         Icons.reply,
                                                         size: 23.sp,
                                                       ))),
-                                              Text("10"),
+                                              const Text("10"),
                                             ],
                                           ),
                                           Row(
@@ -494,7 +494,7 @@ class _HomeScreenReaderState extends State<HomeScreenReader> {
                                                     Icons.comment_rounded,
                                                     size: 23.sp,
                                                   )),
-                                              Text("10"),
+                                             const Text("10"),
                                             ],
                                           ),
                                           Row(
@@ -505,7 +505,7 @@ class _HomeScreenReaderState extends State<HomeScreenReader> {
                                                     Icons.favorite_border,
                                                     size: 23.sp,
                                                   )),
-                                              Text("1k"),
+                                            const  Text("1k"),
                                             ],
                                           )
                                         ],

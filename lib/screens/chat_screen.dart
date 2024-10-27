@@ -1,5 +1,4 @@
 import 'package:anees/screens/widgets/txtformfield.dart';
-import 'package:anees/utils/image_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -85,8 +84,8 @@ class _ChatScreenState extends State<ChatScreen> {
           SizedBox(
             height: 15.h,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          const Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 8.0),
             child: Txtformfield(
               text: "Search for chat...",
               suffixIcon: Icons.search_rounded,

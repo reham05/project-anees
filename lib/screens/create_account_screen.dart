@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/colors.dart';
-import '../utils/image_util.dart';
 import 'login_screen.dart';
 
 class CreateAccountScreen extends StatelessWidget {

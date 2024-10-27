@@ -1,5 +1,4 @@
 import 'package:anees/utils/colors.dart';
-import 'package:anees/utils/image_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -121,15 +120,15 @@ class _PickScreenState extends State<PickScreen> {
                 ),
                 Row(
                   children: [
-                    Expanded(
-                      child: const InterestsWidget(
+                    const Expanded(
+                      child: InterestsWidget(
                         text: "Poetry",
                         image: "assets/images/poetry.png",
                       ),
                     ),
                     SizedBox(width: 5.w),
-                    Expanded(
-                      child: const InterestsWidget(
+                    const Expanded(
+                      child: InterestsWidget(
                         text: "Business",
                         image: "assets/images/poetry.png",
                       ),
@@ -141,15 +140,15 @@ class _PickScreenState extends State<PickScreen> {
                 ),
                 Row(
                   children: [
-                    Expanded(
-                      child: const InterestsWidget(
+                    const Expanded(
+                      child: InterestsWidget(
                         text: "Fantacy",
                         image: "assets/images/poetry.png",
                       ),
                     ),
                     SizedBox(width: 5.w),
-                    Expanded(
-                      child: const InterestsWidget(
+                    const Expanded(
+                      child: InterestsWidget(
                         text: "Detective",
                         image: "assets/images/poetry.png",
                       ),
@@ -161,15 +160,15 @@ class _PickScreenState extends State<PickScreen> {
                 ),
                 Row(
                   children: [
-                    Expanded(
-                      child: const InterestsWidget(
+                    const Expanded(
+                      child: InterestsWidget(
                         text: "English",
                         image: "assets/images/poetry.png",
                       ),
                     ),
                     SizedBox(width: 5.w),
-                    Expanded(
-                      child: const InterestsWidget(
+                    const Expanded(
+                      child: InterestsWidget(
                         text: "Arabic",
                         image: "assets/images/poetry.png",
                       ),
@@ -181,15 +180,15 @@ class _PickScreenState extends State<PickScreen> {
                 ),
                 Row(
                   children: [
-                    Expanded(
-                      child: const InterestsWidget(
+                    const Expanded(
+                      child: InterestsWidget(
                         text: "History",
                         image: "assets/images/poetry.png",
                       ),
                     ),
                     SizedBox(width: 5.w),
-                    Expanded(
-                      child: const InterestsWidget(
+                    const Expanded(
+                      child: InterestsWidget(
                         text: "Technology",
                         image: "assets/images/poetry.png",
                       ),

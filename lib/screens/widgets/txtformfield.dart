@@ -1,4 +1,4 @@
-import 'package:anees/main.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +14,8 @@ class Txtformfield extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.onPressed,
+    this.validator,
+    this.controller,
   });
 
   final String? text;
@@ -22,14 +24,19 @@ class Txtformfield extends StatelessWidget {
   final bool? obscureText;
   final TextInputType? keyboardType;
   final void Function()? onPressed;
+  final String? Function(String?)? validator;
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
+      validator: validator,
       obscureText: obscureText!,
       keyboardType: keyboardType,
       style: GoogleFonts.inter(
           color: cGreen, fontSize: 13.sp, fontWeight: FontWeight.w400),
       decoration: InputDecoration(
+        errorMaxLines: 999,
         hintText: text!,
         labelStyle: GoogleFonts.inter(
             color: cGrey, fontSize: 13.sp, fontWeight: FontWeight.w400),

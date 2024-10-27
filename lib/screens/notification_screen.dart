@@ -250,7 +250,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                         ),
                                         IconButton(
                                             onPressed: () {},
-                                            icon: Icon(Icons.more_horiz))
+                                            icon:const Icon(Icons.more_horiz))
                                       ],
                                     ),
                                   ),
@@ -299,7 +299,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   children: [
                                     CircleAvatar(
                                       radius: 25.r,
-                                      backgroundImage: AssetImage(
+                                      backgroundImage:const AssetImage(
                                           "assets/images/person.png"),
                                     ),
                                     SizedBox(
@@ -348,7 +348,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     ),
                                     IconButton(
                                         onPressed: () {},
-                                        icon: Icon(Icons.more_horiz))
+                                        icon:const Icon(Icons.more_horiz))
                                   ],
                                 ),
                               ),
@@ -356,6 +356,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                           ],
                         );
                       } else {
+                        // ignore: unused_local_variable
                         final pastIndex = index - newNotifications.length;
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -388,7 +389,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   children: [
                                     CircleAvatar(
                                       radius: 25.r,
-                                      backgroundImage: AssetImage(
+                                      backgroundImage:const AssetImage(
                                           "assets/images/person.png"),
                                     ),
                                     SizedBox(
@@ -437,7 +438,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     ),
                                     IconButton(
                                         onPressed: () {},
-                                        icon: Icon(Icons.more_horiz))
+                                        icon:const Icon(Icons.more_horiz))
                                   ],
                                 ),
                               ),

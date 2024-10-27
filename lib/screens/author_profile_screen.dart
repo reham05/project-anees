@@ -1,4 +1,3 @@
-import 'package:anees/utils/image_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -323,12 +322,12 @@ class _AuthorProfileScreenState extends State<AuthorProfileScreen> {
                                           textDirection: TextDirection.rtl,
                                           "هدية بسيطة لكم أتمنى تعجبكم، وهي عبارة عن قصة تاريخية قصيرة كتبتها هذه الأيام بعنوان كبيرة الورد."),
                                       index == 0
-                                          ? SizedBox.shrink()
+                                          ?const SizedBox.shrink()
                                           : SizedBox(
                                               height: 5.h,
                                             ),
                                       index == 0
-                                          ? SizedBox.shrink()
+                                          ? const SizedBox.shrink()
                                           : Container(
                                               height: 150.h,
                                               // width: double.infinity,
@@ -343,7 +342,7 @@ class _AuthorProfileScreenState extends State<AuthorProfileScreen> {
                                                           15)),
                                             ),
                                       index == 0
-                                          ? SizedBox.shrink()
+                                          ? const SizedBox.shrink()
                                           : SizedBox(
                                               height: 5.h,
                                             ),
@@ -365,7 +364,7 @@ class _AuthorProfileScreenState extends State<AuthorProfileScreen> {
                                                     Icons.reply,
                                                     size: 23.sp,
                                                   ))),
-                                          Text("10"),
+                                        const  Text("10"),
                                         ],
                                       ),
                                       Row(
@@ -376,7 +375,7 @@ class _AuthorProfileScreenState extends State<AuthorProfileScreen> {
                                                 Icons.comment_rounded,
                                                 size: 23.sp,
                                               )),
-                                          Text("10"),
+                                        const  Text("10"),
                                         ],
                                       ),
                                       Row(
@@ -387,7 +386,7 @@ class _AuthorProfileScreenState extends State<AuthorProfileScreen> {
                                                 Icons.favorite_border,
                                                 size: 23.sp,
                                               )),
-                                          Text("1k"),
+                                       const   Text("1k"),
                                         ],
                                       )
                                     ],

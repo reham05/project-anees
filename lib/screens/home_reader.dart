@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../utils/image_util.dart';
+
 import 'notification_screen.dart';
 
 const pages = [
@@ -40,30 +40,35 @@ class _HomeReaderState extends State<HomeReader> {
             'assets/images/Home.svg',
             width: 30.w,
             height: 30.h,
+            // ignore: deprecated_member_use
             color: globalIndex == 0 ? Colors.black : Colors.white,
           ),
           SvgPicture.asset(
             'assets/images/Chats.svg',
             width: 40.w,
             height: 40.h,
+            // ignore: deprecated_member_use
             color: globalIndex == 1 ? Colors.black : Colors.white,
           ),
           SvgPicture.asset(
             'assets/images/Add.svg',
             width: 28.w,
             height: 28.h,
+            // ignore: deprecated_member_use
             color: globalIndex == 2 ? Colors.black : Colors.white,
           ),
           SvgPicture.asset(
             'assets/images/Notification-bell.svg',
             width: 32.w,
             height: 32.h,
+            // ignore: deprecated_member_use
             color: globalIndex == 3 ? Colors.black : Colors.white,
           ),
           SvgPicture.asset(
             'assets/images/User.svg',
             width: 30.w,
             height: 30.h,
+            // ignore: deprecated_member_use
             color: globalIndex == 4 ? Colors.black : Colors.white,
           ),
         ],
