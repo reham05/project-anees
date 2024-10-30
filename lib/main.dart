@@ -1,6 +1,6 @@
 //update
 
-import 'package:anees/screens/splash_screen.dart';
+import 'package:anees/screens/home_reader.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               useMaterial3: true,
             ),
-            home: const SplashScreen(),
+            home: const HomeReader(),
           );
         });
   }

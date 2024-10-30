@@ -1,4 +1,4 @@
-
+import 'package:anees/screens/chatbot_screen.dart';
 import 'package:anees/screens/settings_screen.dart';
 import 'package:anees/screens/widgets/txtformfield.dart';
 import 'package:anees/utils/colors.dart';
@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
 
 class HomeScreenReader extends StatefulWidget {
   const HomeScreenReader({super.key});
@@ -79,8 +77,8 @@ class _HomeScreenReaderState extends State<HomeScreenReader> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 60),
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 40),
                             child: InkWell(
                               onTap: () {
                                 Navigator.push(
@@ -92,6 +90,31 @@ class _HomeScreenReaderState extends State<HomeScreenReader> {
                               },
                               child: SvgPicture.asset(
                                 'assets/images/setting.svg',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15.0, top: 10, bottom: 60),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ChatBotScreen(),
+                                    ));
+                              },
+                              child: CircleAvatar(
+                                radius: 19.r,
+                                backgroundImage: const AssetImage(
+                                  'assets/images/chatbot.png',
+                                ),
                               ),
                             ),
                           ),
@@ -494,7 +517,7 @@ class _HomeScreenReaderState extends State<HomeScreenReader> {
                                                     Icons.comment_rounded,
                                                     size: 23.sp,
                                                   )),
-                                             const Text("10"),
+                                              const Text("10"),
                                             ],
                                           ),
                                           Row(
@@ -505,7 +528,7 @@ class _HomeScreenReaderState extends State<HomeScreenReader> {
                                                     Icons.favorite_border,
                                                     size: 23.sp,
                                                   )),
-                                            const  Text("1k"),
+                                              const Text("1k"),
                                             ],
                                           )
                                         ],
