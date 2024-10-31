@@ -39,12 +39,32 @@ class _LoginScreenState extends State<LoginScreen> {
         email: email,
         password: password,
       );
-      Navigator.pushReplacement(
-          // ignore: use_build_context_synchronously
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeReader(),
-          ));
+
+      if (userCredential.user?.emailVerified ?? false) {
+        Navigator.pushReplacement(
+            // ignore: use_build_context_synchronously
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeReader(),
+            ));
+      } else {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(
+                'Please verify your email before logging in',
+                style: GoogleFonts.inter(
+                  color: cWhite,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13.sp,
+                ),
+              )),
+        );
+        setState(() {
+          btnIsLoading = false;
+        });
+      }
     } catch (e) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(

@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/colors.dart';
+import 'account_confirmation_screen.dart';
 import 'widgets/txtformfield.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -56,13 +57,16 @@ class _SignupScreenState extends State<SignupScreen> {
         'createdAt': Timestamp.now(),
         'password': password,
         'userType': userType,
-        'profile_picture_url': "null"
+        'profile_picture_url': "not-image"
       });
-      //nav to home
+      await userCredential.user?.sendEmailVerification();
       Navigator.pushReplacement(
           // ignore: use_build_context_synchronously
           context,
-          MaterialPageRoute(builder: (context) => const HomeReader()));
+          MaterialPageRoute(
+              builder: (context) => AccountConfirmationScreen(
+                    email: email,
+                  )));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         // ignore: use_build_context_synchronously

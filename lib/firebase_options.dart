@@ -47,29 +47,32 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAfNDUNCMIw_PfpX_7cIkIpds75MuXpo3A',
-    appId: '1:936013172449:web:a60dc39f0ae6d573fc31a0',
-    messagingSenderId: '936013172449',
-    projectId: 'anees-7bc24',
-    authDomain: 'anees-7bc24.firebaseapp.com',
-    storageBucket: 'anees-7bc24.appspot.com',
-    measurementId: 'G-H0W7KYKV40',
+    apiKey: 'AIzaSyDKc2kY6h6RvJndRCUU0IFWaitg3ua50AM',
+    appId: '1:696451797455:web:70f3ab9a38590dfeb842ba',
+    messagingSenderId: '696451797455',
+    projectId: 'anees-a8319',
+    authDomain: 'anees-a8319.firebaseapp.com',
+    databaseURL: 'https://anees-a8319-default-rtdb.firebaseio.com',
+    storageBucket: 'anees-a8319.appspot.com',
+    measurementId: 'G-T4EJ3J8L89',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDGgh9HT3qLz_bncG-BXP-QCn9U1dSHRuY',
-    appId: '1:936013172449:android:0abc7d717c895aeffc31a0',
-    messagingSenderId: '936013172449',
-    projectId: 'anees-7bc24',
-    storageBucket: 'anees-7bc24.appspot.com',
+    apiKey: 'AIzaSyAGqw1gMPmqxe5KOGnczuEYESvB3BM-DC4',
+    appId: '1:696451797455:android:62a735b5dbdd7ceeb842ba',
+    messagingSenderId: '696451797455',
+    projectId: 'anees-a8319',
+    databaseURL: 'https://anees-a8319-default-rtdb.firebaseio.com',
+    storageBucket: 'anees-a8319.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBzjRa-6B6t_M8HkNyfWDo_U5AK0al9mus',
-    appId: '1:936013172449:ios:9967e5564aa0ed6afc31a0',
-    messagingSenderId: '936013172449',
-    projectId: 'anees-7bc24',
-    storageBucket: 'anees-7bc24.appspot.com',
+    apiKey: 'AIzaSyCU0C4ijM-jlP_bC0PiJPQRcw18AqXTBHY',
+    appId: '1:696451797455:ios:1caa6e818dbd1a84b842ba',
+    messagingSenderId: '696451797455',
+    projectId: 'anees-a8319',
+    databaseURL: 'https://anees-a8319-default-rtdb.firebaseio.com',
+    storageBucket: 'anees-a8319.appspot.com',
     iosBundleId: 'com.example.anees',
   );
 }

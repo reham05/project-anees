@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "936013172449",
-    "project_id": "anees-7bc24",
-    "storage_bucket": "anees-7bc24.appspot.com"
+    "project_number": "696451797455",
+    "firebase_url": "https://anees-a8319-default-rtdb.firebaseio.com",
+    "project_id": "anees-a8319",
+    "storage_bucket": "anees-a8319.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:936013172449:android:0abc7d717c895aeffc31a0",
+        "mobilesdk_app_id": "1:696451797455:android:62a735b5dbdd7ceeb842ba",
         "android_client_info": {
           "package_name": "com.example.anees"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDGgh9HT3qLz_bncG-BXP-QCn9U1dSHRuY"
+          "current_key": "AIzaSyAGqw1gMPmqxe5KOGnczuEYESvB3BM-DC4"
         }
       ],
       "services": {
