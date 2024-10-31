@@ -1,6 +1,8 @@
 //add anees bot
 
+import 'package:anees/screens/about_app_screen.dart';
 import 'package:anees/screens/account_confirmation_screen.dart';
+import 'package:anees/screens/forgot_password_screen.dart';
 import 'package:anees/screens/home_reader.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'firebase_options.dart';
+import 'screens/privacy_policy.dart';
 import 'screens/splash_screen.dart';
+import 'screens/terms_conditions_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +50,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               useMaterial3: true,
             ),
-            home:  AccountConfirmationScreen(email: 'khaledabobakr15@gmail.com',),
+            home: const HomeReader(),
           );
         });
   }

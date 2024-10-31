@@ -1,3 +1,6 @@
+import 'package:anees/screens/about_app_screen.dart';
+import 'package:anees/screens/privacy_policy.dart';
+import 'package:anees/screens/terms_conditions_screen.dart';
 import 'package:anees/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,19 +62,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const Divider(),
               BuildSettingItem(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TermsConditionsScreen(),
+                      ));
+                },
                 icon: Icons.description_outlined,
                 title: "Terms & Conditions",
               ),
               const Divider(),
               BuildSettingItem(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PrivacyPolicyScreen(),
+                      ));
+                },
                 icon: Icons.lock_outlined,
                 title: "Privacy Policy",
               ),
               const Divider(),
               BuildSettingItem(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AboutAppScreen(),
+                      ));
+                },
                 icon: Icons.info_outline,
                 title: "About",
               ),
