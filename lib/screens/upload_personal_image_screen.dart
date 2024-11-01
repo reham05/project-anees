@@ -122,138 +122,141 @@ class _UploadPersonalImageScreenState extends State<UploadPersonalImageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AbsorbPointer(
-      absorbing: btnIsLoading,
-      child: Scaffold(
-        backgroundColor: cWhite,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                          onPressed: () {
+    return PopScope(
+      canPop: false,
+      child: AbsorbPointer(
+        absorbing: btnIsLoading,
+        child: Scaffold(
+          backgroundColor: cWhite,
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const PickScreen(),
+                                  ));
+                            },
+                            child: Text(
+                              "Skip",
+                              style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13.sp,
+                                  color: Colors.grey.shade600),
+                            ))
+                      ],
+                    ),
+                    Text(
+                      "Profile Picture",
+                      style: GoogleFonts.aclonica(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.sp,
+                          color: cGreen),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Center(
+                      child: Text(
+                        style: GoogleFonts.inter(
+                            letterSpacing: 5,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 17.sp),
+                        "Choose your profile picture.",
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 80.r,
+                          // backgroundColor: Colors.grey,
+                          backgroundImage: _imageFile == null
+                              ? const AssetImage("assets/images/iconPerson.png")
+                              : FileImage(_imageFile!),
+                          backgroundColor: Colors.grey.shade300,
+                        ),
+                        Positioned(
+                          bottom: 10.h,
+                          right: 15.w,
+                          child: CircleAvatar(
+                            radius: 15.r,
+                            backgroundColor: Colors.grey.shade300,
+                            child: Center(
+                                child: IconButton(
+                                    onPressed: () {
+                                      if (_imageFile == null) {
+                                        _showBottomSheet(context);
+                                      } else {
+                                        setState(() {
+                                          _imageFile = null;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      _imageFile == null
+                                          ? Icons.add
+                                          : Icons.delete,
+                                      size: 15.sp,
+                                      color: _imageFile == null
+                                          ? Colors.black
+                                          : Colors.red,
+                                    ))),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 50.h,
+                    ),
+                    Center(
+                        child: Container(
+                      height: 40.h,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: cGreen,
+                        borderRadius: BorderRadius.circular(36.0),
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          if (_imageFile == null) {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const PickScreen(),
-                                ));
-                          },
-                          child: Text(
-                            "Skip",
-                            style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13.sp,
-                                color: Colors.grey.shade600),
-                          ))
-                    ],
-                  ),
-                  Text(
-                    "Profile Picture",
-                    style: GoogleFonts.aclonica(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.sp,
-                        color: cGreen),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Center(
-                    child: Text(
-                      style: GoogleFonts.inter(
-                          letterSpacing: 5,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 17.sp),
-                      "Choose your profile picture.",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 80.r,
-                        // backgroundColor: Colors.grey,
-                        backgroundImage: _imageFile == null
-                            ? const AssetImage("assets/images/iconPerson.png")
-                            : FileImage(_imageFile!),
-                        backgroundColor: Colors.grey.shade300,
+                                    builder: (context) => const PickScreen()));
+                          } else {
+                            _uploadImage();
+                          }
+                        },
+                        child: btnIsLoading
+                            ? ImageAsset(
+                                height: 50.h,
+                                width: 50.w,
+                                imagePath: "assets/images/loading.gif")
+                            : Text(
+                                "Next",
+                                style: GoogleFonts.inter(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: cWhite),
+                              ),
                       ),
-                      Positioned(
-                        bottom: 10.h,
-                        right: 15.w,
-                        child: CircleAvatar(
-                          radius: 15.r,
-                          backgroundColor: Colors.grey.shade300,
-                          child: Center(
-                              child: IconButton(
-                                  onPressed: () {
-                                    if (_imageFile == null) {
-                                      _showBottomSheet(context);
-                                    } else {
-                                      setState(() {
-                                        _imageFile = null;
-                                      });
-                                    }
-                                  },
-                                  icon: Icon(
-                                    _imageFile == null
-                                        ? Icons.add
-                                        : Icons.delete,
-                                    size: 15.sp,
-                                    color: _imageFile == null
-                                        ? Colors.black
-                                        : Colors.red,
-                                  ))),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50.h,
-                  ),
-                  Center(
-                      child: Container(
-                    height: 40.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: cGreen,
-                      borderRadius: BorderRadius.circular(36.0),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        if (_imageFile == null) {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const PickScreen()));
-                        } else {
-                          _uploadImage();
-                        }
-                      },
-                      child: btnIsLoading
-                          ? ImageAsset(
-                              height: 50.h,
-                              width: 50.w,
-                              imagePath: "assets/images/loading.gif")
-                          : Text(
-                              "Next",
-                              style: GoogleFonts.inter(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: cWhite),
-                            ),
-                    ),
-                  )),
-                ],
+                    )),
+                  ],
+                ),
               ),
             ),
           ),

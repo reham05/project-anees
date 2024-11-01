@@ -7,14 +7,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreenReader extends StatefulWidget {
-  const HomeScreenReader({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomeScreenReader> createState() => _HomeScreenReaderState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenReaderState extends State<HomeScreenReader> {
+class _HomeScreenState extends State<HomeScreen> {
   int index = 1;
 
   @override

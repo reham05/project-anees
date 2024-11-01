@@ -1,3 +1,4 @@
+import 'package:anees/screens/reset_password_screen.dart';
 import 'package:anees/screens/widgets/txtformfield.dart';
 import 'package:anees/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +30,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     });
     try {
       await _auth.sendPasswordResetEmail(email: email);
-      // Navigator.push(context, MaterialPageRoute(builder:(context)=>));
+      Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+              builder: (context) => ResetPasswordScreen(email: email)));
     } catch (e) {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(

@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.google.android.play.integrity.BIND_PLAY_INTEGRITY_SERVICE" />
-
+   
     <application
         android:label="anees"
         android:name="${applicationName}"
@@ -28,6 +28,14 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <!-- Registered Callback URLs in TwitterApp -->
+                <data android:scheme="com.example.anees"/> <!-- host is option -->
+                </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

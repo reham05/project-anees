@@ -1,4 +1,5 @@
 import 'package:anees/screens/about_app_screen.dart';
+import 'package:anees/screens/login_screen.dart';
 import 'package:anees/screens/privacy_policy.dart';
 import 'package:anees/screens/terms_conditions_screen.dart';
 import 'package:anees/utils/colors.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../data/models/auth_service.dart';
 import 'widgets/build_setting_item.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -16,6 +18,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  final AuthService _authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +102,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const Divider(),
               BuildSettingItem(
-                onTap: () {},
+                onTap: () async {
+                  await _authService.signOut();
+                  Navigator.pushReplacement(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
+                  );
+                },
                 icon: Icons.logout,
                 title: "Logout",
               ),

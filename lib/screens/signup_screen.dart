@@ -1,4 +1,7 @@
-import 'package:anees/screens/home_reader.dart';
+import 'dart:developer';
+
+import 'package:anees/screens/home.dart';
+import 'package:anees/screens/user_role_selection_screen.dart';
 import 'package:anees/utils/image_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../data/models/auth_service.dart';
 import '../utils/colors.dart';
 import 'account_confirmation_screen.dart';
 import 'widgets/txtformfield.dart';
@@ -21,6 +25,7 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final AuthService _authService = AuthService();
   bool _isChecked = false;
   bool obscurePassword = true;
   bool obscureConfrimPassword = true;
@@ -55,7 +60,7 @@ class _SignupScreenState extends State<SignupScreen> {
         'fullName': fullName,
         'email': email,
         'createdAt': Timestamp.now(),
-        'password': password,
+        // 'password': password,
         'userType': userType,
         'profile_picture_url': "not-image"
       });
@@ -524,23 +529,177 @@ class _SignupScreenState extends State<SignupScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CircleAvatar(
-                                  backgroundColor: cGreen,
-                                  radius: 18.r,
-                                  child: FaIcon(
-                                    FontAwesomeIcons.xTwitter,
-                                    color: Colors.white,
-                                    size: 15.sp,
+                                InkWell(
+                                  onTap: () async {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          content: Row(
+                                            children: [
+                                              SizedBox(
+                                                height: 25.h,
+                                                width: 25.w,
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                  color: cGreen,
+                                                ),
+                                              ),
+                                              SizedBox(width: 20.w),
+                                              Text(
+                                                "Loading...",
+                                                style: GoogleFonts.inter(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15.sp),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                    final result =
+                                        await _authService.signInWithTwitter();
+                                    if (result != null) {
+                                      final User user = result['user'];
+                                      final bool isNewUser =
+                                          result['isNewUser'];
+
+                                      if (isNewUser) {
+                                        log("This is a new user: ${user.displayName}");
+                                        Navigator.pushReplacement(
+                                            // ignore: use_build_context_synchronously
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const UserRoleSelectionPage(),
+                                            ));
+                                      } else {
+                                        log("This is an existing user: ${user.displayName}");
+                                        Navigator.pushReplacement(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Home()),
+                                        );
+                                      }
+                                    } else {
+                                      log("Login failed or was cancelled.");
+                                      // ignore: use_build_context_synchronously
+                                      Navigator.of(context).pop();
+                                      // ignore: use_build_context_synchronously
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                              'An error occurred. Try again.',
+                                              style: GoogleFonts.inter(
+                                                color: cWhite,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 13.sp,
+                                              ),
+                                            )),
+                                      );
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: cGreen,
+                                    radius: 18.r,
+                                    child: FaIcon(
+                                      FontAwesomeIcons.xTwitter,
+                                      color: Colors.white,
+                                      size: 15.sp,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 20.w),
-                                CircleAvatar(
-                                  backgroundColor: cGreen,
-                                  radius: 18.r,
-                                  child: FaIcon(
-                                    FontAwesomeIcons.google,
-                                    color: Colors.white,
-                                    size: 15.sp,
+                                InkWell(
+                                  onTap: () async {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          content: Row(
+                                            children: [
+                                              SizedBox(
+                                                height: 25.h,
+                                                width: 25.w,
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                  color: cGreen,
+                                                ),
+                                              ),
+                                              SizedBox(width: 20.w),
+                                              Text(
+                                                "Loading...",
+                                                style: GoogleFonts.inter(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15.sp),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                    final result =
+                                        await _authService.signInWithGoogle();
+                                    if (result != null) {
+                                      final User user = result['user'];
+                                      final bool isNewUser =
+                                          result['isNewUser'];
+
+                                      if (isNewUser) {
+                                        log("This is a new user: ${user.displayName}");
+                                        Navigator.pushReplacement(
+                                            // ignore: use_build_context_synchronously
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const UserRoleSelectionPage(),
+                                            ));
+                                      } else {
+                                        log("This is an existing user: ${user.displayName}");
+                                        Navigator.pushReplacement(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Home()),
+                                        );
+                                      }
+                                    } else {
+                                      log("Login failed or was cancelled.");
+                                      // ignore: use_build_context_synchronously
+                                      Navigator.of(context).pop();
+                                      // ignore: use_build_context_synchronously
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                              'An error occurred. Try again.',
+                                              style: GoogleFonts.inter(
+                                                color: cWhite,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 13.sp,
+                                              ),
+                                            )),
+                                      );
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: cGreen,
+                                    radius: 18.r,
+                                    child: FaIcon(
+                                      FontAwesomeIcons.google,
+                                      color: Colors.white,
+                                      size: 15.sp,
+                                    ),
                                   ),
                                 ),
                               ],
