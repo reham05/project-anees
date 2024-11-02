@@ -4,6 +4,7 @@ import 'package:anees/screens/about_app_screen.dart';
 import 'package:anees/screens/account_confirmation_screen.dart';
 import 'package:anees/screens/forgot_password_screen.dart';
 import 'package:anees/screens/home.dart';
+import 'package:anees/screens/pick_screen.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

@@ -42,7 +42,8 @@ class AuthService {
             'createdAt': Timestamp.now(),
             // 'password': "",
             'userType': "",
-            'profile_picture_url': "not-image"
+            'profile_picture_url': "not-image",
+            "completedPickInterest": false
           });
         } else {
           log("Existing user signed in: ${user.displayName}");
@@ -101,6 +102,7 @@ class AuthService {
                   // 'password': "",
                   'userType': "",
                   'profile_picture_url': "not-image",
+                  "completedPickInterest": false
                 });
               }
 

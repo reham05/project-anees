@@ -1,6 +1,9 @@
 import 'dart:developer';
 
 import 'package:anees/screens/home.dart';
+import 'package:anees/screens/pick_screen.dart';
+import 'package:anees/screens/privacy_policy.dart';
+import 'package:anees/screens/terms_conditions_screen.dart';
 import 'package:anees/screens/user_role_selection_screen.dart';
 import 'package:anees/utils/image_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,7 +65,8 @@ class _SignupScreenState extends State<SignupScreen> {
         'createdAt': Timestamp.now(),
         // 'password': password,
         'userType': userType,
-        'profile_picture_url': "not-image"
+        'profile_picture_url': "not-image",
+        "completedPickInterest": false
       });
       await userCredential.user?.sendEmailVerification();
       Navigator.pushReplacement(
@@ -415,7 +419,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 TextDecoration.underline),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
-                                            // print("Terms clicked");
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const TermsConditionsScreen()));
                                           },
                                       ),
                                       TextSpan(
@@ -434,7 +442,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 TextDecoration.underline),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
-                                            // print("Privacy Policy clicked");
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const PrivacyPolicyScreen()));
                                           },
                                       ),
                                     ],
@@ -577,13 +589,42 @@ class _SignupScreenState extends State<SignupScreen> {
                                             ));
                                       } else {
                                         log("This is an existing user: ${user.displayName}");
-                                        Navigator.pushReplacement(
-                                          // ignore: use_build_context_synchronously
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Home()),
-                                        );
+                                        String uid = FirebaseAuth
+                                            .instance.currentUser!.uid;
+                                        DocumentSnapshot doc =
+                                            await FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(uid)
+                                                .get();
+
+                                        if (doc['userType'] == null ||
+                                            doc['userType'] == '') {
+                                          Navigator.pushReplacement(
+                                              // ignore: use_build_context_synchronously
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const UserRoleSelectionPage(),
+                                              ));
+                                        } else if (doc[
+                                                'completedPickInterest'] ==
+                                            false) {
+                                          Navigator.pushReplacement(
+                                              // ignore: use_build_context_synchronously
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const PickScreen(),
+                                              ));
+                                        } else {
+                                          Navigator.pushReplacement(
+                                            // ignore: use_build_context_synchronously
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Home()),
+                                          );
+                                        }
                                       }
                                     } else {
                                       log("Login failed or was cancelled.");
@@ -664,13 +705,42 @@ class _SignupScreenState extends State<SignupScreen> {
                                             ));
                                       } else {
                                         log("This is an existing user: ${user.displayName}");
-                                        Navigator.pushReplacement(
-                                          // ignore: use_build_context_synchronously
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Home()),
-                                        );
+                                        String uid = FirebaseAuth
+                                            .instance.currentUser!.uid;
+                                        DocumentSnapshot doc =
+                                            await FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(uid)
+                                                .get();
+
+                                        if (doc['userType'] == null ||
+                                            doc['userType'] == '') {
+                                          Navigator.pushReplacement(
+                                              // ignore: use_build_context_synchronously
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const UserRoleSelectionPage(),
+                                              ));
+                                        } else if (doc[
+                                                'completedPickInterest'] ==
+                                            false) {
+                                          Navigator.pushReplacement(
+                                              // ignore: use_build_context_synchronously
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const PickScreen(),
+                                              ));
+                                        } else {
+                                          Navigator.pushReplacement(
+                                            // ignore: use_build_context_synchronously
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Home()),
+                                          );
+                                        }
                                       }
                                     } else {
                                       log("Login failed or was cancelled.");
