@@ -1,5 +1,7 @@
 //add anees bot
 
+// ignore_for_file: unused_import
+
 import 'package:anees/screens/about_app_screen.dart';
 import 'package:anees/screens/account_confirmation_screen.dart';
 import 'package:anees/screens/add_book.dart';
@@ -63,7 +65,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 useMaterial3: true,
               ),
-              home:  PDFListScreen());
+              home: const SplashScreen());
         });
   }
 }

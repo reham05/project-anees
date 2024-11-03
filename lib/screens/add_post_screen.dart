@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_import, unnecessary_null_comparison, non_constant_identifier_names
 
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:anees/utils/colors.dart';
+
 import 'package:anees/utils/image_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,6 +73,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         pickedImage = null;
         description.text = "";
       });
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -91,6 +93,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       });
     } on FirebaseException catch (e) {
       log(e.toString());
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -114,6 +117,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    // ignore: unused_local_variable
     double width = MediaQuery.of(context).size.width;
     return AbsorbPointer(
       absorbing: btnIsLoading,

@@ -31,6 +31,7 @@ class ShowOptions extends StatelessWidget {
             ),
             onTap: () {
               // Logic to add a post
+              // ignore: avoid_print
               print("Add Post");
               Navigator.pop(context); // Close the bottom sheet
             },
@@ -47,6 +48,7 @@ class ShowOptions extends StatelessWidget {
             ),
             onTap: () {
               // Logic to add a book
+              // ignore: avoid_print
               print("Add Book");
               Navigator.pop(context); // Close the bottom sheet
             },
@@ -63,6 +65,7 @@ class ShowOptions extends StatelessWidget {
             ),
             onTap: () {
               // Logic to add a book
+              // ignore: avoid_print
               print("Add Book");
               Navigator.pop(context); // Close the bottom sheet
             },

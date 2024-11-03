@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_single_cascade_in_expression_statements
+// ignore_for_file: avoid_single_cascade_in_expression_statements, await_only_futures
 
 import 'dart:developer';
 
@@ -42,6 +42,7 @@ class FirestoreMethod {
       required postid,
       required fullName}) async {
     try {
+      // ignore: prefer_const_constructors
       final commentid = Uuid().v4();
       await FirebaseFirestore.instance.collection('posts').doc(postid)
         ..collection('comments').doc(commentid).set({

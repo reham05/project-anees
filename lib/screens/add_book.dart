@@ -1,3 +1,5 @@
+// ignore_for_file: duplicate_import, unused_import
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -8,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 
+// ignore: use_key_in_widget_constructors
 class PDFListScreen extends StatelessWidget {
 
 Future<void> uploadPDF() async {
@@ -38,9 +41,11 @@ Future<void> uploadPDF() async {
         'url': url,
       });
     } else {
+      // ignore: avoid_print
       print("File path is null.");
     }
   } else {
+    // ignore: avoid_print
     print("No file selected.");
   }
 }
@@ -49,10 +54,10 @@ Future<void> uploadPDF() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("PDF Files"),
+        title: const Text("PDF Files"),
         actions: [
           IconButton(
-            icon: Icon(Icons.upload_file),
+            icon: const Icon(Icons.upload_file),
             onPressed: () async {
               await uploadPDF();
             },
@@ -63,6 +68,7 @@ Future<void> uploadPDF() async {
         stream: FirebaseFirestore.instance.collection('pdfs').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
+            // ignore: prefer_const_constructors
             return Center(child: CircularProgressIndicator());
           }
           final pdfs = snapshot.data!.docs;
