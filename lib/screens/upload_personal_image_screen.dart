@@ -186,7 +186,7 @@ class _UploadPersonalImageScreenState extends State<UploadPersonalImageScreen> {
                           // backgroundColor: Colors.grey,
                           backgroundImage: _imageFile == null
                               ? const AssetImage("assets/images/iconPerson.png")
-                              : FileImage(_imageFile!),
+                              : FileImage(_imageFile!,),
                           backgroundColor: Colors.grey.shade300,
                         ),
                         Positioned(

@@ -1,6 +1,8 @@
+import 'package:anees/screens/posts_screen.dart';
 import 'package:anees/screens/profile_screen.dart';
 import 'package:anees/screens/chat_screen.dart';
 import 'package:anees/screens/home_screen.dart';
+import 'package:anees/screens/show_options_screen.dart';
 import 'package:anees/utils/colors.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,8 @@ import 'notification_screen.dart';
 const pages = [
   HomeScreen(),
   ChatScreen(),
-  Text("Add"),
+  PostsScreen(),
+  ShowOptions(),
   NotificationScreen(),
   AuthorProfileScreen(),
 ];
@@ -26,6 +29,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int? globalIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -51,26 +55,31 @@ class _HomeState extends State<Home> {
               // ignore: deprecated_member_use
               color: globalIndex == 1 ? Colors.black : Colors.white,
             ),
+            Icon(
+              Icons.article_outlined,
+              color: globalIndex == 2 ? Colors.black : Colors.white,
+              size: 28.sp,
+            ),
             SvgPicture.asset(
               'assets/images/Add.svg',
               width: 28.w,
               height: 28.h,
               // ignore: deprecated_member_use
-              color: globalIndex == 2 ? Colors.black : Colors.white,
+              color: globalIndex == 3 ? Colors.black : Colors.white,
             ),
             SvgPicture.asset(
               'assets/images/Notification-bell.svg',
               width: 32.w,
               height: 32.h,
               // ignore: deprecated_member_use
-              color: globalIndex == 3 ? Colors.black : Colors.white,
+              color: globalIndex == 4 ? Colors.black : Colors.white,
             ),
             SvgPicture.asset(
               'assets/images/User.svg',
               width: 30.w,
               height: 30.h,
               // ignore: deprecated_member_use
-              color: globalIndex == 4 ? Colors.black : Colors.white,
+              color: globalIndex == 5 ? Colors.black : Colors.white,
             ),
           ],
           onTap: (index) {
@@ -84,3 +93,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+

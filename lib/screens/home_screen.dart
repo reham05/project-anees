@@ -1,11 +1,27 @@
+import 'package:anees/screens/authors_screen.dart';
 import 'package:anees/screens/chatbot_screen.dart';
 import 'package:anees/screens/settings_screen.dart';
 import 'package:anees/screens/widgets/txtformfield.dart';
 import 'package:anees/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+const filters = [
+  {'image': "assets/images/novels.png", 'text': "Novels"},
+  {'image': "assets/images/poetry.png", 'text': "Poerty"},
+  {'image': "assets/images/stories.png", 'text': "Stories"},
+  {'image': "assets/images/arabic.png", 'text': "Arabic"},
+];
+const mostSearch = [
+  "Popular",
+  "Best seller",
+  "New Releases",
+  "Romantic",
+  "Technology",
+];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -149,15 +165,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 85.w,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    image: const DecorationImage(
+                                    image: DecorationImage(
                                       image: AssetImage(
-                                          "assets/images/poetry.png"),
+                                          filters[index]['image'].toString()),
                                       fit: BoxFit.cover,
                                     )),
                                 child: Center(
                                     child: Expanded(
                                   child: Text(
-                                    "Novels",
+                                    filters[index]['text'].toString(),
                                     style: GoogleFonts.poppins(
                                         color: cWhite,
                                         fontSize: 13.sp,
@@ -168,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           separatorBuilder: (context, index) => SizedBox(
                                 width: 15.w,
                               ),
-                          itemCount: 5),
+                          itemCount: filters.length),
                     ),
                   ),
                   Padding(
@@ -182,20 +198,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w700,
                               color: cGreen),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "More",
-                              style: GoogleFonts.inter(
-                                  color: Colors.grey.shade700, fontSize: 11.sp),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 12.sp,
-                              color: Colors.grey.shade700,
-                            )
-                          ],
                         ),
                       ],
                     ),
@@ -233,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Center(
                                       child: Text(
-                                    "Popular",
+                                    mostSearch[index],
                                     style: GoogleFonts.poly(
                                       color: index == 0
                                           ? cWhite
@@ -247,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           separatorBuilder: (context, index) => SizedBox(
                                 width: 15.w,
                               ),
-                          itemCount: 5),
+                          itemCount: mostSearch.length),
                     ),
                   ),
                   Padding(
@@ -351,10 +353,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Row(
                           children: [
-                            Text("More",
-                                style: GoogleFonts.inter(
-                                    color: Colors.grey.shade700,
-                                    fontSize: 11.sp)),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AuthorsScreen()));
+                              },
+                              child: Text("More",
+                                  style: GoogleFonts.inter(
+                                      color: Colors.grey.shade700,
+                                      fontSize: 11.sp)),
+                            ),
                             Icon(
                               Icons.arrow_forward_ios,
                               size: 12.sp,
@@ -369,180 +380,207 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       height: 130.h,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) => Container(
-                                // height: 100.h,
-                                width: 100.w,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('users')
+                            .where('userType', isEqualTo: 'Author')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator(
+                              color: cGreen,
+                            ));
+                          }
 
+                          if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          }
+
+                          final authors = snapshot.data!.docs
+                              .map((doc) => doc.data() as Map<String, dynamic>)
+                              .toList();
+
+                          return ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final author = authors[index];
+                              return Container(
+                                width: 100.w,
                                 decoration: BoxDecoration(
-                                    color: cGreen4,
-                                    borderRadius: BorderRadius.circular(20)),
+                                  color: cGreen4,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                                 child: Column(
                                   children: [
-                                    SizedBox(
-                                      height: 5.h,
-                                    ),
+                                    SizedBox(height: 5.h),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Container(
                                         height: 90.h,
                                         width: 70.w,
                                         decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            image: const DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/images/nagib.png"),
-                                              fit: BoxFit.fill,
-                                            )),
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                                author['profile_picture_url']),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     Text(
-                                      " Naguib Mahfouz",
+                                      author['fullName'],
                                       style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.bold,
-                                          color: cGreen,
-                                          fontSize: 8.sp),
+                                        fontWeight: FontWeight.bold,
+                                        color: cGreen,
+                                        fontSize: 8.sp,
+                                      ),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),
                                   ],
                                 ),
-                              ),
-                          separatorBuilder: (context, index) => SizedBox(
-                                width: 15.w,
-                              ),
-                          itemCount: 5),
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                SizedBox(width: 15.w),
+                            itemCount: authors.length,
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Posts",
-                          style: GoogleFonts.roboto(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w700,
-                              color: cGreen),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 150.h,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) => Container(
-                                // height: 100.h,
-                                width: 320.w,
-                                decoration: BoxDecoration(
-                                    color: cGreen4,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 22.r,
-                                            backgroundImage: const AssetImage(
-                                              "assets/images/person.png",
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 5.w,
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: Text("Sultan Almousa",
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: GoogleFonts.inter(
-                                                          fontSize: 14.sp,
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                ),
-                                                Text("Jan 1, 2024",
-                                                    style: GoogleFonts.inter(
-                                                        fontSize: 12.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Text(
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          textDirection: TextDirection.rtl,
-                                          "هدية بسيطة لكم أتمنى تعجبكم، وهي عبارة عن قصة تاريخية قصيرة كتبتها هذه الأيام بعنوان كبيرة الورد."),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Transform(
-                                                  alignment: Alignment.center,
-                                                  transform:
-                                                      Matrix4.rotationY(3.14),
-                                                  child: IconButton(
-                                                      onPressed: () {},
-                                                      icon: Icon(
-                                                        Icons.reply,
-                                                        size: 23.sp,
-                                                      ))),
-                                              const Text("10"),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.comment_rounded,
-                                                    size: 23.sp,
-                                                  )),
-                                              const Text("10"),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.favorite_border,
-                                                    size: 23.sp,
-                                                  )),
-                                              const Text("1k"),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                          separatorBuilder: (context, index) => SizedBox(
-                                width: 10.w,
-                              ),
-                          itemCount: 5),
-                    ),
-                  ),
+                  )
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(
+                  //         "Posts",
+                  //         style: GoogleFonts.roboto(
+                  //             fontSize: 13.sp,
+                  //             fontWeight: FontWeight.w700,
+                  //             color: cGreen),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: SizedBox(
+                  //     height: 150.h,
+                  //     child: ListView.separated(
+                  //         scrollDirection: Axis.horizontal,
+                  //         itemBuilder: (context, index) => Container(
+                  //               // height: 100.h,
+                  //               width: 320.w,
+                  //               decoration: BoxDecoration(
+                  //                   color: cGreen4,
+                  //                   borderRadius: BorderRadius.circular(20)),
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(8.0),
+                  //                 child: Column(
+                  //                   mainAxisAlignment: MainAxisAlignment.start,
+                  //                   children: [
+                  //                     Row(
+                  //                       children: [
+                  //                         CircleAvatar(
+                  //                           radius: 22.r,
+                  //                           backgroundImage: const AssetImage(
+                  //                             "assets/images/person.png",
+                  //                           ),
+                  //                         ),
+                  //                         SizedBox(
+                  //                           width: 5.w,
+                  //                         ),
+                  //                         Expanded(
+                  //                           child: Row(
+                  //                             mainAxisAlignment:
+                  //                                 MainAxisAlignment
+                  //                                     .spaceBetween,
+                  //                             children: [
+                  //                               Expanded(
+                  //                                 child: Text("Sultan Almousa",
+                  //                                     maxLines: 2,
+                  //                                     overflow:
+                  //                                         TextOverflow.ellipsis,
+                  //                                     style: GoogleFonts.inter(
+                  //                                         fontSize: 14.sp,
+                  //                                         fontWeight:
+                  //                                             FontWeight.bold)),
+                  //                               ),
+                  //                               Text("Jan 1, 2024",
+                  //                                   style: GoogleFonts.inter(
+                  //                                       fontSize: 12.sp,
+                  //                                       fontWeight:
+                  //                                           FontWeight.bold)),
+                  //                             ],
+                  //                           ),
+                  //                         ),
+                  //                       ],
+                  //                     ),
+                  //                     const Text(
+                  //                         maxLines: 2,
+                  //                         overflow: TextOverflow.ellipsis,
+                  //                         textDirection: TextDirection.rtl,
+                  //                         "هدية بسيطة لكم أتمنى تعجبكم، وهي عبارة عن قصة تاريخية قصيرة كتبتها هذه الأيام بعنوان كبيرة الورد."),
+                  //                     Row(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment.spaceBetween,
+                  //                       children: [
+                  //                         Row(
+                  //                           children: [
+                  //                             Transform(
+                  //                                 alignment: Alignment.center,
+                  //                                 transform:
+                  //                                     Matrix4.rotationY(3.14),
+                  //                                 child: IconButton(
+                  //                                     onPressed: () {},
+                  //                                     icon: Icon(
+                  //                                       Icons.reply,
+                  //                                       size: 23.sp,
+                  //                                     ))),
+                  //                             const Text("10"),
+                  //                           ],
+                  //                         ),
+                  //                         Row(
+                  //                           children: [
+                  //                             IconButton(
+                  //                                 onPressed: () {},
+                  //                                 icon: Icon(
+                  //                                   Icons.comment_rounded,
+                  //                                   size: 23.sp,
+                  //                                 )),
+                  //                             const Text("10"),
+                  //                           ],
+                  //                         ),
+                  //                         Row(
+                  //                           children: [
+                  //                             IconButton(
+                  //                                 onPressed: () {},
+                  //                                 icon: Icon(
+                  //                                   Icons.favorite_border,
+                  //                                   size: 23.sp,
+                  //                                 )),
+                  //                             const Text("1k"),
+                  //                           ],
+                  //                         )
+                  //                       ],
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //         separatorBuilder: (context, index) => SizedBox(
+                  //               width: 10.w,
+                  //             ),
+                  //         itemCount: 5),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

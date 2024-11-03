@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/colors.dart';
 
+List<String> filters = ["All", "Unread", "Groups", "Sent", "Requests"];
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -85,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
             height: 15.h,
           ),
           const Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Txtformfield(
               text: "Search for chat...",
               suffixIcon: Icons.search_rounded,
@@ -127,7 +129,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           padding: const EdgeInsets.all(10.0),
                           child: Center(
                               child: Text(
-                            "All",
+                            filters[index],
                             style: GoogleFonts.poly(
                               color: index == 0 ? cWhite : Colors.grey.shade500,
                               fontWeight: FontWeight.w400,
