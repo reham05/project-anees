@@ -43,7 +43,9 @@ class AuthService {
             // 'password': "",
             'userType': "",
             'profile_picture_url': "not-image",
-            "completedPickInterest": false
+            "completedPickInterest": false,
+            'followers': [],
+            'following': [],
           });
         } else {
           log("Existing user signed in: ${user.displayName}");
@@ -102,7 +104,9 @@ class AuthService {
                   // 'password': "",
                   'userType': "",
                   'profile_picture_url': "not-image",
-                  "completedPickInterest": false
+                  "completedPickInterest": false,
+                  'followers': [],
+                  'following': [],
                 });
               }
 
@@ -145,7 +149,7 @@ class AuthService {
           await _googleSignIn.signOut();
         }
       }
-      await _auth.signOut();
+      await FirebaseAuth.instance.signOut();
     }
   }
 }

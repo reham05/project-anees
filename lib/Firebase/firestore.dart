@@ -38,7 +38,7 @@ class FirestoreMethod {
   addComment(
       {required comment,
       required userimage,
-      required uuid,
+      required uid,
       required postid,
       required fullName}) async {
     try {
@@ -51,9 +51,46 @@ class FirestoreMethod {
           'userImage': userimage,
           'postid': postid,
           'commentid': commentid,
+          'uid': uid,
+          'date': Timestamp.now()
         });
     } on Exception catch (e) {
       log(e.toString());
     }
+  }
+
+  removeComment({required Map commentMap}) async {
+    if (FirebaseAuth.instance.currentUser!.uid == commentMap['uid']) {
+      await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(commentMap['postid'])
+        ..collection('comments').doc(commentMap['commentid']).delete();
+    }
+  }
+
+  followUser({required userId}) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      'following': FieldValue.arrayUnion([userId])
+    });
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'followers':
+          FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
+    });
+  }
+
+  unfollowUser({required userId}) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      'following': FieldValue.arrayRemove([userId])
+    });
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'followers':
+          FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
+    });
   }
 }

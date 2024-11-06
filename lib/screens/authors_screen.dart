@@ -1,4 +1,7 @@
+import 'package:anees/screens/profile_screen.dart';
+import 'package:anees/screens/room_chat_screen.dart';
 import 'package:anees/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -89,6 +92,10 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
                   return ListView.separated(
                     itemBuilder: (context, index) {
                       final author = filteredAuthors[index];
+                      if (author['uid'] ==
+                          FirebaseAuth.instance.currentUser!.uid) {
+                        return const SizedBox.shrink();
+                      }
                       return Container(
                         height: 80.h,
                         decoration: BoxDecoration(
@@ -126,22 +133,58 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    author['fullName'],
-                                    style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 14.sp,
+                                  Expanded(
+                                    child: Text(
+                                      author['fullName'],
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 14.sp,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
                                   ),
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 20.sp,
-                                      ))
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        RoomChatScreen(
+                                                            fullName: author[
+                                                                'fullName'],
+                                                            userImage: author[
+                                                                'profile_picture_url'],
+                                                            uid: author[
+                                                                'uid'])));
+                                          },
+                                          icon: Icon(
+                                            Icons.message_rounded,
+                                            size: 20.sp,
+                                            color: Colors.black,
+                                          )),
+                                      IconButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfileScreen(
+                                                          userId:
+                                                              author['uid']),
+                                                ));
+                                          },
+                                          icon: Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 20.sp,
+                                            color: Colors.black,
+                                          )),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),

@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadPersonalImageScreen extends StatefulWidget {
@@ -28,18 +29,60 @@ class _UploadPersonalImageScreenState extends State<UploadPersonalImageScreen> {
   Future<void> _pickImageFromCamera() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.camera);
     if (pickedImage != null) {
-      setState(() {
-        _imageFile = File(pickedImage.path);
-      });
+      final croppedImage = await ImageCropper().cropImage(
+        sourcePath: pickedImage.path,
+        aspectRatio:
+            const CropAspectRatio(ratioX: 1, ratioY: 1), // Customize as needed
+
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Image',
+            toolbarColor: Colors.blue,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+          ),
+          IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ),
+        ],
+      );
+
+      if (croppedImage != null) {
+        setState(() {
+          _imageFile = File(croppedImage.path);
+        });
+      }
     }
   }
 
   Future<void> _pickImageFromGallery() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      setState(() {
-        _imageFile = File(pickedImage.path);
-      });
+      final croppedImage = await ImageCropper().cropImage(
+        sourcePath: pickedImage.path,
+        aspectRatio: const CropAspectRatio(
+            ratioX: 1, ratioY: 1), // Aspect ratio 1:1; customize as needed
+        // Change to .circle if you want a circular crop
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Image',
+            toolbarColor: cGreen,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+          ),
+          IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ),
+        ],
+      );
+
+      if (croppedImage != null) {
+        setState(() {
+          _imageFile = File(croppedImage.path);
+        });
+      }
     }
   }
 
@@ -186,7 +229,9 @@ class _UploadPersonalImageScreenState extends State<UploadPersonalImageScreen> {
                           // backgroundColor: Colors.grey,
                           backgroundImage: _imageFile == null
                               ? const AssetImage("assets/images/iconPerson.png")
-                              : FileImage(_imageFile!,),
+                              : FileImage(
+                                  _imageFile!,
+                                ),
                           backgroundColor: Colors.grey.shade300,
                         ),
                         Positioned(

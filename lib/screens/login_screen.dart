@@ -60,12 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 builder: (context) => const UploadPersonalImageScreen(),
               ));
         } else {
-          Navigator.pushReplacement(
-              // ignore: use_build_context_synchronously
-              context,
-              MaterialPageRoute(
-                builder: (context) => const Home(),
-              ));
+          Navigator.pushAndRemoveUntil(
+            // ignore: use_build_context_synchronously
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Home(),
+            ),
+            (route) => false,
+          );
         }
       } else {
         // ignore: use_build_context_synchronously

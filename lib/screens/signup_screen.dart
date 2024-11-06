@@ -66,7 +66,9 @@ class _SignupScreenState extends State<SignupScreen> {
         // 'password': password,
         'userType': userType,
         'profile_picture_url': "not-image",
-        "completedPickInterest": false
+        "completedPickInterest": false,
+        'followers': [],
+        'following': [],
       });
       await userCredential.user?.sendEmailVerification();
       Navigator.pushReplacement(

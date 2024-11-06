@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class CommentScreen extends StatefulWidget {
   const CommentScreen({super.key, this.postId});
@@ -76,11 +77,12 @@ class _CommentScreenState extends State<CommentScreen> {
                         .collection('posts')
                         .doc(widget.postId)
                         .collection('comments')
+                        .orderBy("date", descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Expanded(
-                          child:  Center(
+                          child: Center(
                             child: CircularProgressIndicator(
                               color: cGreen,
                             ),
@@ -93,8 +95,9 @@ class _CommentScreenState extends State<CommentScreen> {
                             child: Text(
                               "No comments are added.",
                               style: GoogleFonts.inter(
-                                  color: Colors.black, fontWeight: FontWeight.w500),
-                                  textAlign: TextAlign.center,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         );
@@ -111,28 +114,75 @@ class _CommentScreenState extends State<CommentScreen> {
                                 snapshot.data!.docs[index].data()
                                     as Map<String, dynamic>;
 
-                            return ListTile(
-                              title: Text(
-                                commentMap['fullName'] ?? "",
-                                style: GoogleFonts.inter(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500),
+                            return Container(
+                              color: commentMap['uid'] ==
+                                      FirebaseAuth.instance.currentUser!.uid
+                                  ? cGreen4
+                                  : cWhite,
+                              child: InkWell(
+                                onLongPress: commentMap['uid'] ==
+                                        FirebaseAuth.instance.currentUser!.uid
+                                    ? () {
+                                        showMenu(
+                                          color: Colors.grey[200],
+
+                                          context: context,
+                                          position: const RelativeRect.fromLTRB(
+                                              100.0,
+                                              100.0,
+                                              0.0,
+                                              0.0), // Adjust the menu position
+                                          items: [
+                                            const PopupMenuItem(
+                                              value: 'delete',
+                                              child: Text("Delete Comment"),
+                                            ),
+                                          ],
+                                        ).then((value) {
+                                          if (value == 'delete') {
+                                            FirestoreMethod().removeComment(
+                                                commentMap: commentMap);
+                                          }
+                                        });
+                                      }
+                                    : null,
+                                child: ListTile(
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        commentMap['fullName'] ?? "",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        DateFormat.MMMEd().format(
+                                            commentMap['date'].toDate()),
+                                        style: GoogleFonts.inter(
+                                            fontSize: 10.sp,
+                                            fontWeight: FontWeight.w400),
+                                      )
+                                    ],
+                                  ),
+                                  subtitle: Text(
+                                    commentMap['comment'],
+                                    style: GoogleFonts.inter(fontSize: 12.sp),
+                                  ),
+                                  leading: CircleAvatar(
+                                    radius: 20.r,
+                                    backgroundImage: NetworkImage(
+                                        commentMap['userImage'] ?? ''),
+                                  ),
+                                  // trailing: IconButton(
+                                  //     onPressed: () {},
+                                  //     icon: Icon(
+                                  //       Icons.favorite,
+                                  //       size: 20.sp,
+                                  //     )),
+                                ),
                               ),
-                              subtitle: Text(
-                                commentMap['comment'],
-                                style: GoogleFonts.inter(fontSize: 12.sp),
-                              ),
-                              leading: CircleAvatar(
-                                radius: 20.r,
-                                backgroundImage:
-                                    NetworkImage(commentMap['userImage'] ?? ''),
-                              ),
-                              // trailing: IconButton(
-                              //     onPressed: () {},
-                              //     icon: Icon(
-                              //       Icons.favorite,
-                              //       size: 20.sp,
-                              //     )),
                             );
                           },
                         ),
@@ -165,7 +215,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                               fullName: userData['fullName'],
                                               userimage: userData[
                                                   'profile_picture_url'],
-                                              uuid: userData['uid'],
+                                              uid: userData['uid'],
                                               postid: widget.postId);
                                           log('2');
                                         }

@@ -13,17 +13,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart'as intl;
+import 'package:intl/intl.dart' as intl;
 import 'package:share_plus/share_plus.dart';
 
-class PostsScreen extends StatefulWidget {
-  const PostsScreen({super.key});
+class DeletePostsScreen extends StatefulWidget {
+  const DeletePostsScreen({super.key});
 
   @override
-  State<PostsScreen> createState() => _PostsScreenState();
+  State<DeletePostsScreen> createState() => _DeletePostsScreenState();
 }
 
-class _PostsScreenState extends State<PostsScreen> {
+class _DeletePostsScreenState extends State<DeletePostsScreen> {
   // Map<String, dynamic> userData = {};
 
   // @override
@@ -108,17 +108,25 @@ class _PostsScreenState extends State<PostsScreen> {
       appBar: AppBar(
         backgroundColor: cGreen4,
         title: Text(
-          "Posts",
+          "My Posts",
           style: GoogleFonts.aclonica(fontSize: 18.sp),
         ),
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios)),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection("posts").orderBy('date',descending: true).snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .where('uid',
+                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -210,11 +218,35 @@ class _PostsScreenState extends State<PostsScreen> {
                                                                     FontWeight
                                                                         .bold)),
                                                   ),
-                                                  Text(intl.DateFormat.MMMEd().format(postMap['date'].toDate()),
-                                                      style: GoogleFonts.inter(
-                                                          fontSize: 12.sp,
-                                                          fontWeight:
-                                                              FontWeight.bold)),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                          intl.DateFormat
+                                                                  .MMMEd()
+                                                              .format(postMap[
+                                                                      'date']
+                                                                  .toDate()),
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                                  fontSize:
+                                                                      12.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            FirestoreMethod()
+                                                                .deletePosts(
+                                                                    postMap:
+                                                                        postMap);
+                                                          },
+                                                          icon: Icon(
+                                                            Icons.delete,
+                                                            color:
+                                                                Colors.orange,
+                                                          ))
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
                                             ),

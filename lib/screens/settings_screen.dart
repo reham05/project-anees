@@ -1,11 +1,14 @@
 import 'package:anees/screens/about_app_screen.dart';
+import 'package:anees/screens/account_screen.dart';
 import 'package:anees/screens/login_screen.dart';
 import 'package:anees/screens/privacy_policy.dart';
 import 'package:anees/screens/terms_conditions_screen.dart';
 import 'package:anees/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../data/models/auth_service.dart';
 import 'widgets/build_setting_item.dart';
@@ -48,7 +51,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: 50.h,
               ),
               BuildSettingItem(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AccountScreen(),
+                      ));
+                },
                 icon: Icons.person_outlined,
                 title: "Account",
               ),
@@ -104,11 +113,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               BuildSettingItem(
                 onTap: () async {
                   await _authService.signOut();
-                  Navigator.pushReplacement(
+
+                  Navigator.pushAndRemoveUntil(
                     // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
+                      builder: (context) => const LoginScreen(),
+                    ),
+                    (route) => false,
                   );
                 },
                 icon: Icons.logout,

@@ -1,3 +1,5 @@
+import 'package:anees/screens/add_post_screen.dart';
+import 'package:anees/screens/delete_posts_screen.dart';
 import 'package:anees/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +18,7 @@ class ShowOptions extends StatelessWidget {
           child: Text("Create & Manage",
               style: GoogleFonts.aclonica(color: cGreen, fontSize: 18.sp)),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
@@ -33,7 +36,12 @@ class ShowOptions extends StatelessWidget {
               // Logic to add a post
               // ignore: avoid_print
               print("Add Post");
-              Navigator.pop(context); // Close the bottom sheet
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddPostScreen(),
+                  ));
             },
           ),
           ListTile(
@@ -47,10 +55,10 @@ class ShowOptions extends StatelessWidget {
                   fontSize: 15.sp, color: cGreen, fontWeight: FontWeight.w500),
             ),
             onTap: () {
-              // Logic to add a book
-              // ignore: avoid_print
-              print("Add Book");
-              Navigator.pop(context); // Close the bottom sheet
+              // // Logic to add a book
+              // // ignore: avoid_print
+              // print("Add Book");
+              // Navigator.pop(context); // Close the bottom sheet
             },
           ),
           ListTile(
@@ -64,10 +72,11 @@ class ShowOptions extends StatelessWidget {
                   fontSize: 15.sp, color: cGreen, fontWeight: FontWeight.w500),
             ),
             onTap: () {
-              // Logic to add a book
-              // ignore: avoid_print
-              print("Add Book");
-              Navigator.pop(context); // Close the bottom sheet
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DeletePostsScreen(),
+                  ));
             },
           ),
         ],

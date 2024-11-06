@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final String postId;
@@ -109,7 +110,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            Text(postDetails!['createdAt'],
+                            Text(
+                                DateFormat.MMMEd()
+                                    .format(postDetails!['date'].toDate()),
                                 style: GoogleFonts.inter(
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.bold)),
@@ -160,6 +163,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           .collection('posts')
                           .doc(widget.postId)
                           .collection('comments')
+                          .orderBy("date", descending: true)
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
@@ -181,7 +185,20 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 backgroundImage: NetworkImage(
                                     commentData['userImage'] ?? ''),
                               ),
-                              title: Text(commentData['fullName']),
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(commentData['fullName']),
+                                  Text(
+                                    DateFormat.MMMEd()
+                                        .format(commentData['date'].toDate()),
+                                    style: GoogleFonts.inter(
+                                        fontSize: 10.sp,
+                                        fontWeight: FontWeight.w400),
+                                  )
+                                ],
+                              ),
                               subtitle: Text(commentData['comment']),
                             );
                           },

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +15,7 @@ class Txtformfield extends StatelessWidget {
     this.onPressed,
     this.validator,
     this.controller,
+    this.readOnly = false,
   });
 
   final String? text;
@@ -26,10 +26,12 @@ class Txtformfield extends StatelessWidget {
   final void Function()? onPressed;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
+  final bool readOnly;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      readOnly: readOnly,
       validator: validator,
       obscureText: obscureText!,
       keyboardType: keyboardType,

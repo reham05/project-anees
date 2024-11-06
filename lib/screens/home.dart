@@ -5,20 +5,12 @@ import 'package:anees/screens/home_screen.dart';
 import 'package:anees/screens/show_options_screen.dart';
 import 'package:anees/utils/colors.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'notification_screen.dart';
-
-const pages = [
-  HomeScreen(),
-  ChatScreen(),
-  PostsScreen(),
-  ShowOptions(),
-  NotificationScreen(),
-  AuthorProfileScreen(),
-];
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -29,7 +21,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int? globalIndex = 0;
-
+  List pages = [
+    const HomeScreen(),
+    const ChatScreen(),
+    const PostsScreen(),
+    const ShowOptions(),
+    const NotificationScreen(),
+    ProfileScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+  ];
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -93,4 +92,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-

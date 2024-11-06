@@ -67,7 +67,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
         'des': description.text,
         'createdAt': formattedDate,
         'likes': [],
-        'share_count':0
+        'share_count': 0,
+        'date': Timestamp.now()
       });
       setState(() {
         pickedImage = null;
@@ -133,7 +134,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                           icon: Icon(
                             Icons.cancel,
                             color: cGreen,
