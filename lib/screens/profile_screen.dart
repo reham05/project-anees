@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 
 import '../Firebase/firestore.dart';
 import '../utils/colors.dart';
+import 'account_screen.dart';
 import 'comment_screen.dart';
 import 'postdetails_screen.dart';
 
@@ -206,7 +207,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         followersCount += 1;
                                       }
                                     } else {
-                                      // Navigator edit profile
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const AccountScreen(),
+                                          ));
                                     }
                                   },
                                   child: Center(
