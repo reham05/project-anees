@@ -10,6 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'profile_screen.dart';
+
 const filters = [
   {'image': "assets/images/novels.png", 'text': "Novels"},
   {'image': "assets/images/poetry.png", 'text': "Poerty"},
@@ -411,42 +413,52 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (author['uid'] == uid) {
                                 return const SizedBox.shrink();
                               }
-                              return Container(
-                                width: 100.w,
-                                decoration: BoxDecoration(
-                                  color: cGreen4,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 5.h),
-                                    Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Container(
-                                        height: 90.h,
-                                        width: 70.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                                author['profile_picture_url']),
-                                            fit: BoxFit.fill,
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProfileScreen(
+                                            userId: author['uid']),
+                                      ));
+                                },
+                                child: Container(
+                                  width: 100.w,
+                                  decoration: BoxDecoration(
+                                    color: cGreen4,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 5.h),
+                                      Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Container(
+                                          height: 90.h,
+                                          width: 70.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            image: DecorationImage(
+                                              image: NetworkImage(author[
+                                                  'profile_picture_url']),
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Text(
-                                      author['fullName'],
-                                      style: GoogleFonts.inter(
-                                        fontWeight: FontWeight.bold,
-                                        color: cGreen,
-                                        fontSize: 8.sp,
+                                      Text(
+                                        author['fullName'],
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.bold,
+                                          color: cGreen,
+                                          fontSize: 8.sp,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               );
                             },
