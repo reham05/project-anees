@@ -10,6 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+import 'profile_screen.dart';
+
 class PostDetailScreen extends StatefulWidget {
   final String postId;
 
@@ -91,34 +93,45 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CircleAvatar(
-                        radius: 22.r,
-                        backgroundImage:
-                            NetworkImage(postDetails!['userImage'] ?? ''),
-                      ),
-                      SizedBox(width: 8.w),
                       Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                postDetails!['fullName'] ?? '',
-                                style: GoogleFonts.inter(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(
+                                    userId: postDetails!['uid'],
+                                    fromHome: false,
+                                  ),
+                                ));
+                          },
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 22.r,
+                                backgroundImage: NetworkImage(
+                                    postDetails!['userImage'] ?? ''),
                               ),
-                            ),
-                            Text(
-                                DateFormat.MMMEd()
-                                    .format(postDetails!['date'].toDate()),
-                                style: GoogleFonts.inter(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.bold)),
-                          ],
+                              SizedBox(width: 8.w),
+                              Expanded(
+                                child: Text(
+                                  postDetails!['fullName'] ?? '',
+                                  style: GoogleFonts.inter(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                      Text(
+                          DateFormat.MMMEd()
+                              .format(postDetails!['date'].toDate()),
+                          style: GoogleFonts.inter(
+                              fontSize: 12.sp, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   SizedBox(height: 10.h),
@@ -180,26 +193,36 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                             Map<String, dynamic> commentData =
                                 snapshot.data!.docs[index].data()
                                     as Map<String, dynamic>;
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    commentData['userImage'] ?? ''),
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CommentScreen(
+                                              postId: postDetails!['postid'],
+                                            )));
+                              },
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      commentData['userImage'] ?? ''),
+                                ),
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(commentData['fullName']),
+                                    Text(
+                                      DateFormat.MMMEd()
+                                          .format(commentData['date'].toDate()),
+                                      style: GoogleFonts.inter(
+                                          fontSize: 10.sp,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  ],
+                                ),
+                                subtitle: Text(commentData['comment']),
                               ),
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(commentData['fullName']),
-                                  Text(
-                                    DateFormat.MMMEd()
-                                        .format(commentData['date'].toDate()),
-                                    style: GoogleFonts.inter(
-                                        fontSize: 10.sp,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                ],
-                              ),
-                              subtitle: Text(commentData['comment']),
                             );
                           },
                         );

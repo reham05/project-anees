@@ -21,6 +21,7 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: cWhite,
       appBar: AppBar(
         title: Text(
           'Authors',
@@ -174,8 +175,9 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ProfileScreen(
-                                                          userId:
-                                                              author['uid']),
+                                                    userId: author['uid'],
+                                                    fromHome: false,
+                                                  ),
                                                 ));
                                           },
                                           icon: Icon(
@@ -192,8 +194,15 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) =>
-                        SizedBox(height: 15.h),
+                    separatorBuilder: (context, index) {
+                      final author = filteredAuthors[index];
+                      if (author['uid'] ==
+                          FirebaseAuth.instance.currentUser!.uid) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return SizedBox(height: 12.h);
+                    },
                     itemCount: filteredAuthors.length,
                   );
                 },

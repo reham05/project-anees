@@ -419,7 +419,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ProfileScreen(
-                                            userId: author['uid']),
+                                          userId: author['uid'],
+                                          fromHome: false,
+                                        ),
                                       ));
                                 },
                                 child: Container(
@@ -462,8 +464,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               );
                             },
-                            separatorBuilder: (context, index) =>
-                                SizedBox(width: 15.w),
+                            separatorBuilder: (context, index) {
+                              final author = authors[index];
+                              if (author['uid'] ==
+                                  FirebaseAuth.instance.currentUser!.uid) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return SizedBox(width: 15.w);
+                            },
                             itemCount: authors.length,
                           );
                         },

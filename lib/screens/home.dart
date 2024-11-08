@@ -27,7 +27,10 @@ class _HomeState extends State<Home> {
     const PostsScreen(),
     const ShowOptions(),
     const NotificationScreen(),
-    ProfileScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+    ProfileScreen(
+      userId: FirebaseAuth.instance.currentUser!.uid,
+      fromHome: true,
+    ),
   ];
   @override
   Widget build(BuildContext context) {

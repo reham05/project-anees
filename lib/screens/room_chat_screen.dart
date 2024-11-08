@@ -15,10 +15,12 @@ class RoomChatScreen extends StatefulWidget {
     required this.fullName,
     required this.userImage,
     required this.uid,
+    this.readmessage = false,
   });
   final String fullName;
   final String userImage;
   final String uid;
+  final bool readmessage;
   @override
   State<RoomChatScreen> createState() => _RoomChatScreenState();
 }
@@ -30,6 +32,17 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     List users = [FirebaseAuth.instance.currentUser!.uid, widget.uid];
     users.sort();
     return '${users[0]}_${users[1]}';
+  }
+
+  Future<void> readMessage({required messageid}) async {
+    await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(chatRoomId())
+        .collection('messages')
+        .doc(messageid)
+        .update({
+      'readmessage': true,
+    });
   }
 
   @override
@@ -105,6 +118,11 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                         String currentId =
                             FirebaseAuth.instance.currentUser!.uid;
                         String senderid = messageMap['senderid'];
+                        String messageid = messageMap['messageId'];
+                        if (senderid !=
+                            FirebaseAuth.instance.currentUser!.uid) {
+                          readMessage(messageid: messageid);
+                        }
                         return Align(
                           alignment: senderid != currentId
                               ? Alignment.topLeft
@@ -186,6 +204,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                             .doc(uuid)
                             .set({
                           'message': messageController.text,
+                          'readmessage': false,
                           'senderid': uid,
                           'date': Timestamp.now(),
                           'messageId': uuid,

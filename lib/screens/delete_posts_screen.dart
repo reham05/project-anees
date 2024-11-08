@@ -339,7 +339,9 @@ class _DeletePostsScreenState extends State<DeletePostsScreen> {
                                                 IconButton(
                                                     onPressed: () {
                                                       FirestoreMethod().addLike(
-                                                          postMap: postMap);
+                                                          postMap: postMap,
+                                                          userFullName: '',
+                                                          userImage: '');
                                                     },
                                                     icon: Icon(
                                                       Icons.favorite,

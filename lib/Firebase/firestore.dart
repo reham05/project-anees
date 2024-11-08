@@ -7,7 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethod {
-  addLike({required Map postMap}) async {
+  addLike(
+      {required Map postMap, required userFullName, required userImage}) async {
     if (postMap['likes'].contains(FirebaseAuth.instance.currentUser!.uid)) {
       await FirebaseFirestore.instance
           .collection('posts')
@@ -23,6 +24,24 @@ class FirestoreMethod {
           .update({
         'likes': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
       });
+      if (FirebaseAuth.instance.currentUser!.uid != postMap['uid']) {
+        final notificationId = Uuid().v4();
+        await FirebaseFirestore.instance
+            .collection("activitesNotifications")
+            .doc(postMap['uid'])
+            .collection("notifications")
+            .doc(notificationId)
+            .set({
+          'uid': FirebaseAuth.instance.currentUser!.uid,
+          'userImage': userImage,
+          'fullName': userFullName,
+          'postid': postMap['postid'],
+          'notifiactionTitle': "liked your post",
+          'date': Timestamp.now(),
+          'newNotification': true,
+          'notificationId': notificationId
+        });
+      }
     }
   }
 

@@ -1,9 +1,11 @@
+import 'package:anees/screens/room_chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../Firebase/firestore.dart';
@@ -13,8 +15,10 @@ import 'comment_screen.dart';
 import 'postdetails_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key, required this.userId});
+  const ProfileScreen(
+      {super.key, required this.userId, required this.fromHome});
   final String? userId;
+  final bool fromHome;
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -26,14 +30,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late int followersCount = 0;
   late String fullName = '';
   late String userImage = '';
+  late String userid = '';
   late List following;
   late bool infollowing;
+  late String myName = '';
+  late String myImage = '';
   Future<void> fetchCurrentUser() async {
     var snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     following = snapshot.data()!['following'];
+    myName = snapshot.data()!['fullName'];
+    myImage = snapshot.data()!['profile_picture_url'];
     infollowing = following.contains(widget.userId);
   }
 
@@ -55,6 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         postCount = snapPosts.docs.length;
         fullName = userData!['fullName'];
         userImage = userData['profile_picture_url'];
+        userid = userData['uid'];
         followersCount = userData["followers"].length;
       });
       await fetchCurrentUser();
@@ -178,61 +188,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: 5.h,
                             ),
-                            SizedBox(
-                              width: 150.w,
-                              height: 30.h,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          infollowing ? cGreen3 : cGreen),
-                                  onPressed: () {
-                                    if (widget.userId !=
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                widget.fromHome ||
                                         FirebaseAuth
-                                            .instance.currentUser!.uid) {
-                                      if (infollowing == true) {
-                                        setState(() {
-                                          infollowing = false;
-                                          followersCount -= 1;
-                                        });
-                                        FirestoreMethod().unfollowUser(
-                                            userId: widget.userId);
-                                        //unfollow
-                                      } else {
-                                        setState(() {
-                                          infollowing = true;
-                                        });
-
-                                        FirestoreMethod()
-                                            .followUser(userId: widget.userId);
-                                        followersCount += 1;
-                                      }
-                                    } else {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const AccountScreen(),
-                                          ));
-                                    }
-                                  },
-                                  child: Center(
-                                      child: Text(
-                                    widget.userId ==
+                                                .instance.currentUser!.uid ==
+                                            widget.userId
+                                    ? const SizedBox.shrink()
+                                    : SizedBox(
+                                        width: 20.w,
+                                      ),
+                                SizedBox(
+                                  width: widget.fromHome ||
+                                          FirebaseAuth
+                                                  .instance.currentUser!.uid ==
+                                              widget.userId
+                                      ? 150.w
+                                      : 110.w,
+                                  height: 30.h,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              infollowing ? cGreen3 : cGreen),
+                                      onPressed: () {
+                                        if (widget.userId !=
                                             FirebaseAuth
-                                                .instance.currentUser!.uid
-                                        ? "Edit Profile"
-                                        : infollowing
-                                            ? "unfollow"
-                                            : "Follow",
-                                    style:
-                                        GoogleFonts.inter(color: Colors.white),
-                                  ))),
+                                                .instance.currentUser!.uid) {
+                                          if (infollowing == true) {
+                                            setState(() {
+                                              infollowing = false;
+                                              followersCount -= 1;
+                                            });
+                                            FirestoreMethod().unfollowUser(
+                                                userId: widget.userId);
+                                            //unfollow
+                                          } else {
+                                            setState(() {
+                                              infollowing = true;
+                                            });
+
+                                            FirestoreMethod().followUser(
+                                                userId: widget.userId);
+                                            followersCount += 1;
+                                          }
+                                        } else {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const AccountScreen(),
+                                              ));
+                                        }
+                                      },
+                                      child: Center(
+                                          child: Text(
+                                        widget.userId ==
+                                                FirebaseAuth
+                                                    .instance.currentUser!.uid
+                                            ? "Edit Profile"
+                                            : infollowing
+                                                ? "unfollow"
+                                                : "Follow",
+                                        style: GoogleFonts.inter(
+                                            color: Colors.white),
+                                      ))),
+                                ),
+                                widget.fromHome ||
+                                        FirebaseAuth
+                                                .instance.currentUser!.uid ==
+                                            widget.userId
+                                    ? const SizedBox.shrink()
+                                    : InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RoomChatScreen(
+                                                        fullName: fullName,
+                                                        userImage: userImage,
+                                                        uid: userid,
+                                                        readmessage: true,
+                                                      )));
+                                        },
+                                        child: HugeIcon(
+                                          icon:
+                                              HugeIcons.strokeRoundedMessage02,
+                                          color: cGreen,
+                                          size: 30.sp,
+                                        ),
+                                      )
+                              ],
                             )
                           ],
                         ),
                       ),
                     ),
-                    widget.userId != FirebaseAuth.instance.currentUser!.uid
+                    widget.fromHome == false
                         ? Positioned(
                             child: SafeArea(
                             child: IconButton(
@@ -681,7 +734,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                                       () {
                                                                     FirestoreMethod().addLike(
                                                                         postMap:
-                                                                            postMap);
+                                                                            postMap,
+                                                                        userFullName:
+                                                                            myName,
+                                                                        userImage:
+                                                                            myImage);
                                                                   },
                                                                   icon: Icon(
                                                                     Icons

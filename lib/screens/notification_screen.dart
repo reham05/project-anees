@@ -1,8 +1,11 @@
+import 'package:anees/screens/postdetails_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../data/models/notification_item.dart';
 import '../utils/colors.dart';
 
@@ -27,7 +30,7 @@ class _NotificationScreenState extends State<NotificationScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this); // عدد التبويبات
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -35,6 +38,53 @@ class _NotificationScreenState extends State<NotificationScreen>
     _tabController.dispose();
     super.dispose();
   }
+
+  Future<List<Map<String, dynamic>>> fetchNotifications() async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection("activitesNotifications")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("notifications")
+        .orderBy('date', descending: true)
+        .get();
+
+    List<Map<String, dynamic>> newNotifications = [];
+    List<Map<String, dynamic>> pastNotifications = [];
+
+    for (var doc in snapshot.docs) {
+      var data = doc.data();
+      data['isNew'] = data['newNotification'] == true;
+      data['notificationId'] = doc.id;
+
+      if (data['isNew']) {
+        newNotifications.add(data);
+      } else {
+        pastNotifications.add(data);
+      }
+    }
+
+    return [...newNotifications, ...pastNotifications];
+  }
+
+  Future<void> updateNotificationStatus({required notificationId}) async {
+    await FirebaseFirestore.instance
+        .collection("activitesNotifications")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("notifications")
+        .doc(notificationId)
+        .update({
+      'newNotification': false,
+    });
+  }
+
+  // Future<List<QueryDocumentSnapshot>> fetchNotifications() async {
+  //   var snapshot = await FirebaseFirestore.instance
+  //       .collection("activitesNotifications")
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .collection("notifications")
+  //       .orderBy('date', descending: true)
+  //       .get();
+  //   return snapshot.docs;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -111,18 +161,16 @@ class _NotificationScreenState extends State<NotificationScreen>
             height: 5.h,
           ),
           TabBar(
-            controller: _tabController, // ربط الـ TabBar بالـ TabController
+            controller: _tabController,
             tabs: [
               Tab(
                 child: Text(
                   'Events',
                   style: TextStyle(
-                    color: _tabController.index == 0
-                        ? cGreen
-                        : Colors.black, // تغيير اللون عند النقر
+                    color: _tabController.index == 0 ? cGreen : Colors.black,
                     fontWeight: _tabController.index == 0
                         ? FontWeight.bold
-                        : FontWeight.normal, // تغيير سمك الخط
+                        : FontWeight.normal,
                   ),
                 ),
               ),
@@ -138,7 +186,6 @@ class _NotificationScreenState extends State<NotificationScreen>
                 ),
               ),
             ],
-
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: const BoxDecoration(
               border: Border(
@@ -250,7 +297,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                         ),
                                         IconButton(
                                             onPressed: () {},
-                                            icon:const Icon(Icons.more_horiz))
+                                            icon: const Icon(Icons.more_horiz))
                                       ],
                                     ),
                                   ),
@@ -263,199 +310,158 @@ class _NotificationScreenState extends State<NotificationScreen>
                         itemCount: 10),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      if (index < newNotifications.length) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            index == 0
-                                ? Text(
-                                    "New",
-                                    style: GoogleFonts.inter(
-                                        color: Colors.black,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                : const SizedBox.shrink(),
-                            index == 0
-                                ? SizedBox(
-                                    height: 5.h,
-                                  )
-                                : const SizedBox.shrink(),
-                            Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.grey.shade300),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 25.r,
-                                      backgroundImage:const AssetImage(
-                                          "assets/images/person.png"),
-                                    ),
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          RichText(
-                                            text: TextSpan(
-                                              style:
-                                                  DefaultTextStyle.of(context)
-                                                      .style,
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: "Osamah Almuslim ",
-                                                  style: GoogleFonts.inter(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 13.sp),
-                                                ),
-                                                TextSpan(
-                                                  text: "posted a new post",
-                                                  style: GoogleFonts.inter(
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      color: Colors.black,
-                                                      fontSize: 12.sp),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Text(
-                                            "3 h",
-                                            style: GoogleFonts.inter(
-                                                color: Colors.black,
-                                                fontSize: 12.sp),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon:const Icon(Icons.more_horiz))
-                                  ],
+                FutureBuilder(
+                  future: fetchNotifications(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: cGreen,
+                        ),
+                      );
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Text('No notifications found'),
+                      );
+                    }
+
+                    var notifications = snapshot.data!;
+                    bool pastSectionShown = false;
+
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          var notificationData = notifications[index];
+                          updateNotificationStatus(
+                              notificationId:
+                                  notificationData['notificationId']);
+
+                          if (notificationData['isNew'] && index == 0) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "New",
+                                  style: GoogleFonts.inter(
+                                    color: Colors.black,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        // ignore: unused_local_variable
-                        final pastIndex = index - newNotifications.length;
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            index == newNotifications.length
-                                ? Text(
-                                    "Past notifications",
-                                    style: GoogleFonts.inter(
-                                        color: Colors.black,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                : const SizedBox.shrink(),
-                            index == newNotifications.length
-                                ? SizedBox(
-                                    height: 5.h,
-                                  )
-                                : const SizedBox.shrink(),
-                            Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.grey.shade200),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 25.r,
-                                      backgroundImage:const AssetImage(
-                                          "assets/images/person.png"),
-                                    ),
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          RichText(
-                                            text: TextSpan(
-                                              style:
-                                                  DefaultTextStyle.of(context)
-                                                      .style,
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: "Osamah Almuslim ",
-                                                  style: GoogleFonts.inter(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 13.sp),
-                                                ),
-                                                TextSpan(
-                                                  text: "liked your post",
-                                                  style: GoogleFonts.inter(
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      color: Colors.black,
-                                                      fontSize: 12.sp),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Text(
-                                            "3 h",
-                                            style: GoogleFonts.inter(
-                                                color: Colors.black,
-                                                fontSize: 12.sp),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon:const Icon(Icons.more_horiz))
-                                  ],
+                                SizedBox(height: 5.h),
+                                buildNotificationCard(notificationData),
+                              ],
+                            );
+                          } else if (!notificationData['isNew'] &&
+                              !pastSectionShown) {
+                            pastSectionShown = true;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Past notifications",
+                                  style: GoogleFonts.inter(
+                                    color: Colors.black,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                    },
-                    separatorBuilder: (context, index) => SizedBox(height: 5.h),
-                    itemCount:
-                        newNotifications.length + pastNotifications.length,
-                  ),
-                )
+                                SizedBox(height: 5.h),
+                                buildNotificationCard(notificationData),
+                              ],
+                            );
+                          } else {
+                            return buildNotificationCard(notificationData);
+                          }
+                        },
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 5.h),
+                        itemCount: notifications.length,
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buildNotificationCard(Map<String, dynamic> notificationData) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    PostDetailScreen(postId: notificationData['postid'])));
+      },
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: notificationData['isNew']
+              ? cGreen4
+              : Colors.grey.shade200,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 25.r,
+                backgroundImage: NetworkImage(notificationData['userImage'] ??
+                    "assets/images/person.png"),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: [
+                          TextSpan(
+                            text: notificationData['fullName'] + " ",
+                            style: GoogleFonts.inter(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                          TextSpan(
+                            text: notificationData['notifiactionTitle'],
+                            style: GoogleFonts.inter(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.black,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      timeago.format(notificationData['date'].toDate(),
+                          locale: 'en_short'),
+                      style: GoogleFonts.inter(
+                          color: Colors.black, fontSize: 12.sp),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.more_horiz),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
