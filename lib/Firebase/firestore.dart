@@ -54,12 +54,14 @@ class FirestoreMethod {
     }
   }
 
-  addComment(
-      {required comment,
-      required userimage,
-      required uid,
-      required postid,
-      required fullName}) async {
+  addComment({
+    required comment,
+    required userimage,
+    required uid,
+    required postid,
+    required fullName,
+    required postUserId,
+  }) async {
     try {
       // ignore: prefer_const_constructors
       final commentid = Uuid().v4();
@@ -71,8 +73,27 @@ class FirestoreMethod {
           'postid': postid,
           'commentid': commentid,
           'uid': uid,
+          'postUserId': postUserId,
           'date': Timestamp.now()
         });
+      if (FirebaseAuth.instance.currentUser!.uid != postUserId) {
+        final notificationId = Uuid().v4();
+        await FirebaseFirestore.instance
+            .collection("activitesNotifications")
+            .doc(postUserId)
+            .collection("notifications")
+            .doc(notificationId)
+            .set({
+          'uid': FirebaseAuth.instance.currentUser!.uid,
+          'userImage': userimage,
+          'fullName': fullName,
+          'postid': postid,
+          'notifiactionTitle': "commented on your post",
+          'date': Timestamp.now(),
+          'newNotification': true,
+          'notificationId': notificationId
+        });
+      }
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -87,7 +108,7 @@ class FirestoreMethod {
     }
   }
 
-  followUser({required userId}) async {
+  followUser({required userId, required userName, required userImage}) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -97,6 +118,22 @@ class FirestoreMethod {
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
       'followers':
           FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
+    });
+
+    final notificationId = Uuid().v4();
+    await FirebaseFirestore.instance
+        .collection("activitesNotifications")
+        .doc(userId)
+        .collection("notifications")
+        .doc(notificationId)
+        .set({
+      'uid': FirebaseAuth.instance.currentUser!.uid,
+      'userImage': userImage,
+      'fullName': userName,
+      'notifiactionTitle': "started following you",
+      'date': Timestamp.now(),
+      'newNotification': true,
+      'notificationId': notificationId
     });
   }
 

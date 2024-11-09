@@ -13,8 +13,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class CommentScreen extends StatefulWidget {
-  const CommentScreen({super.key, this.postId});
+  const CommentScreen({super.key, this.postId, required this.postUserId});
   final String? postId;
+  final String? postUserId;
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
@@ -125,13 +126,9 @@ class _CommentScreenState extends State<CommentScreen> {
                                     ? () {
                                         showMenu(
                                           color: Colors.grey[200],
-
                                           context: context,
                                           position: const RelativeRect.fromLTRB(
-                                              100.0,
-                                              100.0,
-                                              0.0,
-                                              0.0), // Adjust the menu position
+                                              100.0, 100.0, 0.0, 0.0),
                                           items: [
                                             const PopupMenuItem(
                                               value: 'delete',
@@ -216,6 +213,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                               userimage: userData[
                                                   'profile_picture_url'],
                                               uid: userData['uid'],
+                                              postUserId: widget.postUserId,
                                               postid: widget.postId);
                                           log('2');
                                         }

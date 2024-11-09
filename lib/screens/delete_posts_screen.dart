@@ -323,6 +323,9 @@ class _DeletePostsScreenState extends State<DeletePostsScreen> {
                                                                 CommentScreen(
                                                               postId: postMap[
                                                                   'postid'],
+                                                              postUserId:
+                                                                  postMap[
+                                                                      'uid'],
                                                             ),
                                                           ));
                                                     },

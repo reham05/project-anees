@@ -44,6 +44,8 @@ class AuthService {
             'userType': "",
             'profile_picture_url': "not-image",
             "completedPickInterest": false,
+            'city': "",
+            'region': "",
             'followers': [],
             'following': [],
           });
@@ -104,6 +106,8 @@ class AuthService {
                   // 'password': "",
                   'userType': "",
                   'profile_picture_url': "not-image",
+                  'city': "",
+                  'region': "",
                   "completedPickInterest": false,
                   'followers': [],
                   'following': [],

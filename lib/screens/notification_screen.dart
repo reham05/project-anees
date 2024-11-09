@@ -1,4 +1,6 @@
+import 'package:anees/screens/eventdetails_screen.dart';
 import 'package:anees/screens/postdetails_screen.dart';
+import 'package:anees/screens/profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -76,15 +78,26 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
   }
 
-  // Future<List<QueryDocumentSnapshot>> fetchNotifications() async {
-  //   var snapshot = await FirebaseFirestore.instance
-  //       .collection("activitesNotifications")
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .collection("notifications")
-  //       .orderBy('date', descending: true)
-  //       .get();
-  //   return snapshot.docs;
-  // }
+  Future<void> updateeventsNotificationStatus({required notificationId}) async {
+    await FirebaseFirestore.instance
+        .collection("eventsNotifications")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("notifications")
+        .doc(notificationId)
+        .update({
+      'newNotification': false,
+    });
+  }
+
+  Future<List<QueryDocumentSnapshot>> fetcheventsNotifications() async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection("eventsNotifications")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("notifications")
+        .orderBy('date', descending: true)
+        .get();
+    return snapshot.docs;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -203,111 +216,169 @@ class _NotificationScreenState extends State<NotificationScreen>
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Expanded(
-                    child: ListView.separated(
-                        itemBuilder: (context, index) => Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                index == 0
-                                    ? Text(
-                                        "New",
-                                        style: GoogleFonts.inter(
-                                            color: Colors.black,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    : const SizedBox.shrink(),
-                                index == 0
-                                    ? SizedBox(
-                                        height: 5.h,
-                                      )
-                                    : const SizedBox.shrink(),
-                                Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.grey.shade200),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          height: 60.h,
-                                          width: 60.w,
-                                          decoration: BoxDecoration(
-                                              color: cGreen,
-                                              image: const DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: AssetImage(
-                                                  "assets/images/demo-ministry.png",
-                                                ),
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                        ),
-                                        SizedBox(
-                                          width: 10.w,
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              RichText(
-                                                text: TextSpan(
-                                                  style: DefaultTextStyle.of(
-                                                          context)
-                                                      .style,
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                      text:
-                                                          "Ministry of Culture ",
-                                                      style: GoogleFonts.inter(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 13.sp),
+                    child: FutureBuilder(
+                      future: fetcheventsNotifications(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: cGreen,
+                            ),
+                          );
+                        }
+
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: Text('No notifications found'),
+                          );
+                        }
+                        var notifications = snapshot.data!;
+                        return ListView.separated(
+                            itemBuilder: (context, index) {
+                              var notificationData = notifications[index];
+                              updateeventsNotificationStatus(
+                                  notificationId:
+                                      notificationData['notificationId']);
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  index == 0
+                                      ? Text(
+                                          "New",
+                                          style: GoogleFonts.inter(
+                                              color: Colors.black,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      : const SizedBox.shrink(),
+                                  index == 0
+                                      ? SizedBox(
+                                          height: 5.h,
+                                        )
+                                      : const SizedBox.shrink(),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EventdetailsScreen(
+                                                    eventdetails:
+                                                        notificationData),
+                                          ));
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: notificationData[
+                                                      'newNotification'] ==
+                                                  true
+                                              ? cGreen4
+                                              : Colors.grey.shade200),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              height: 60.h,
+                                              width: 60.w,
+                                              decoration: BoxDecoration(
+                                                  color: cGreen,
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image: NetworkImage(
+                                                      notificationData[
+                                                          'institutionImage'],
                                                     ),
-                                                    TextSpan(
-                                                      text:
-                                                          "is holding a new event",
-                                                      style: GoogleFonts.inter(
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          color: Colors.black,
-                                                          fontSize: 12.sp),
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                            ),
+                                            SizedBox(
+                                              width: 10.w,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                          text: notificationData[
+                                                                  'institutionName'] +
+                                                              " ",
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      13.sp),
+                                                        ),
+                                                        TextSpan(
+                                                          text: notificationData[
+                                                              'notifiactionTitle'],
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                                  fontStyle:
+                                                                      FontStyle
+                                                                          .italic,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      12.sp),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                  Text(
+                                                    timeago.format(
+                                                        notificationData['date']
+                                                            .toDate(),
+                                                        locale: 'en_short'),
+                                                    style: GoogleFonts.inter(
+                                                        color: Colors.black,
+                                                        fontSize: 12.sp),
+                                                  ),
+                                                ],
                                               ),
-                                              Text(
-                                                "3 h",
-                                                style: GoogleFonts.inter(
-                                                    color: Colors.black,
-                                                    fontSize: 12.sp),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                            IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                    Icons.more_horiz))
+                                          ],
                                         ),
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(Icons.more_horiz))
-                                      ],
+                                      ),
                                     ),
                                   ),
+                                ],
+                              );
+                            },
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 5.h,
                                 ),
-                              ],
-                            ),
-                        separatorBuilder: (context, index) => SizedBox(
-                              height: 5.h,
-                            ),
-                        itemCount: 10),
+                            itemCount: notifications.length);
+                      },
+                    ),
                   ),
                 ),
                 FutureBuilder(
@@ -395,19 +466,25 @@ class _NotificationScreenState extends State<NotificationScreen>
   Widget buildNotificationCard(Map<String, dynamic> notificationData) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    PostDetailScreen(postId: notificationData['postid'])));
+        if (notificationData.containsKey('postid')) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      PostDetailScreen(postId: notificationData['postid'])));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfileScreen(
+                      userId: notificationData['uid'], fromHome: false)));
+        }
       },
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: notificationData['isNew']
-              ? cGreen4
-              : Colors.grey.shade200,
+          color: notificationData['isNew'] ? cGreen4 : Colors.grey.shade200,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

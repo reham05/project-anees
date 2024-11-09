@@ -229,7 +229,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             });
 
                                             FirestoreMethod().followUser(
-                                                userId: widget.userId);
+                                                userId: widget.userId,
+                                                userName: myName,
+                                                userImage: myImage);
                                             followersCount += 1;
                                           }
                                         } else {
@@ -713,6 +715,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                                               CommentScreen(
                                                                             postId:
                                                                                 postMap['postid'],
+                                                                            postUserId:
+                                                                                postMap['uid'],
                                                                           ),
                                                                         ));
                                                                   },

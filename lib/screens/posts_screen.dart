@@ -353,6 +353,9 @@ class _PostsScreenState extends State<PostsScreen> {
                                                                           CommentScreen(
                                                                     postId: postMap[
                                                                         'postid'],
+                                                                    postUserId:
+                                                                        postMap[
+                                                                            'uid'],
                                                                   ),
                                                                 ));
                                                           },

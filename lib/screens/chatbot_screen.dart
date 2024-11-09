@@ -116,134 +116,132 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: cGreen,
-        body: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  color: cWhite,
-                ),
-              )
-            : Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        right: 10.0, left: 10.0, top: 15, bottom: 16),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: SafeArea(
-                            child: SizedBox(
-                              height: 15.h,
-                            ),
+    return Scaffold(
+      backgroundColor: cGreen,
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: cWhite,
+              ),
+            )
+          : Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      right: 10.0, left: 10.0, top: 15, bottom: 16),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: SafeArea(
+                          child: SizedBox(
+                            height: 20.h,
                           ),
                         ),
-                        Expanded(
-                          flex: 4,
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            itemCount: messages.length,
-                            itemBuilder: (context, index) {
-                              return ChatBubble(
-                                text: messages[index]["text"],
-                                isUser: messages[index]["isUser"],
-                                userImage: userImage!,
-                              );
-                            },
-                          ),
+                      ),
+                      Expanded(
+                        flex: 9,
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            return ChatBubble(
+                              text: messages[index]["text"],
+                              isUser: messages[index]["isUser"],
+                              userImage: userImage!,
+                            );
+                          },
                         ),
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                            color: cGreen2,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: _controller,
-                                  cursorColor: Colors.black,
-                                  style: const TextStyle(color: Colors.black),
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                      // vertical: 12,
-                                      horizontal: 12,
-                                    ),
-                                    hintText: 'Type your message here...',
-                                    hintStyle: TextStyle(
-                                        color: Colors.black45,
-                                        fontStyle: FontStyle.italic),
-                                    border: InputBorder.none,
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: cGreen2,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _controller,
+                                cursorColor: Colors.black,
+                                style: const TextStyle(color: Colors.black),
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    // vertical: 12,
+                                    horizontal: 12,
                                   ),
+                                  hintText: 'Type your message here...',
+                                  hintStyle: TextStyle(
+                                      color: Colors.black45,
+                                      fontStyle: FontStyle.italic),
+                                  border: InputBorder.none,
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  String userInput = _controller.text;
-                                  if (userInput.isNotEmpty) {
-                                    sendMessage(userInput);
-                                  }
-                                },
-                                icon:
-                                    const Icon(Icons.send, color: Colors.black),
-                              ),
-                            ],
-                          ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                String userInput = _controller.text;
+                                if (userInput.isNotEmpty) {
+                                  sendMessage(userInput);
+                                }
+                              },
+                              icon: const Icon(Icons.send, color: Colors.black),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Positioned(
-                    top: -120.h,
-                    // left: -5.w,
-                    child: SvgPicture.asset(
-                      'assets/images/Ellipse-author-profile.svg',
-                      fit: BoxFit.fill,
-                    ),
+                ),
+                Positioned(
+                  top: -20.h,
+                  left: -15.w,
+                  child: SvgPicture.asset(
+                    'assets/images/Ellipse-author-profile.svg',
+                    fit: BoxFit.fill,
                   ),
-                  Positioned(
-                      top: 25.h,
-                      left: 20.w,
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
+                ),
+                Positioned(
+                    top: 25.h,
+                    left: 20.w,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                        ))),
+                Positioned(
+                  top: 90.h,
+                  left: 105.w,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Welcome to",
+                        style: GoogleFonts.aclonica(
                             color: Colors.white,
-                          ))),
-                  Positioned(
-                    top: 35.h,
-                    left: 110.w,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Welcome to",
-                          style: GoogleFonts.aclonica(
-                              color: Colors.white,
-                              letterSpacing: 1.5,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.sp,
-                              fontStyle: FontStyle.italic),
-                        ),
-                        Text(
-                          "Anees-bot",
-                          style: GoogleFonts.aclonica(
-                              color: Colors.black,
-                              letterSpacing: 1.5,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25.sp),
-                        ),
-                      ],
-                    ),
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.sp,
+                            fontStyle: FontStyle.italic),
+                      ),
+                      Text(
+                        "Anees-bot",
+                        style: GoogleFonts.aclonica(
+                            color: Colors.black,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25.sp),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-      ),
+                ),
+              ],
+            ),
     );
   }
 }

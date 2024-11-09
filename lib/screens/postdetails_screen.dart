@@ -165,6 +165,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                               MaterialPageRoute(
                                   builder: (context) => CommentScreen(
                                         postId: postDetails!['postid'],
+                                        postUserId: postDetails!['uid'],
                                       )));
                         },
                       ),
@@ -200,6 +201,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                     MaterialPageRoute(
                                         builder: (context) => CommentScreen(
                                               postId: postDetails!['postid'],
+                                              postUserId: postDetails!['uid'],
                                             )));
                               },
                               child: ListTile(
