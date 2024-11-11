@@ -228,6 +228,7 @@ class _PostsScreenState extends State<PostsScreen> {
                                                       child: Row(
                                                         children: [
                                                           CircleAvatar(
+                                                            backgroundColor: cGreen2,
                                                             radius: 22.r,
                                                             backgroundImage:
                                                                 NetworkImage(

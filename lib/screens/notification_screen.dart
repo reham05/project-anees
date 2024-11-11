@@ -1,3 +1,5 @@
+// ignore_for_file: collection_methods_unrelated_type
+
 import 'package:anees/screens/eventdetails_screen.dart';
 import 'package:anees/screens/postdetails_screen.dart';
 import 'package:anees/screens/profile_screen.dart';
@@ -362,9 +364,72 @@ class _NotificationScreenState extends State<NotificationScreen>
                                               ),
                                             ),
                                             IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                    Icons.more_horiz))
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title: const Text(
+                                                        'Delete this notification',
+                                                        style: TextStyle(
+                                                            color: cGreen),
+                                                      ),
+                                                      content: const Text(
+                                                          'Do you want to delete this notification?'),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "eventsNotifications")
+                                                                .doc(FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser!
+                                                                    .uid)
+                                                                .collection(
+                                                                    "notifications")
+                                                                .doc(notificationData[
+                                                                    'notificationId'])
+                                                                .delete();
+                                                            setState(() {
+                                                              notifications
+                                                                  .remove(
+                                                                      index);
+                                                            });
+
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: const Text(
+                                                            'Delete',
+                                                            style: TextStyle(
+                                                                color: cGreen),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: const Text(
+                                                            'Cancel',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              icon:
+                                                  const Icon(Icons.more_horiz),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -423,7 +488,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   ),
                                 ),
                                 SizedBox(height: 5.h),
-                                buildNotificationCard(notificationData),
+                                buildNotificationCard(notificationData, index),
                               ],
                             );
                           } else if (!notificationData['isNew'] &&
@@ -441,11 +506,12 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   ),
                                 ),
                                 SizedBox(height: 5.h),
-                                buildNotificationCard(notificationData),
+                                buildNotificationCard(notificationData, index),
                               ],
                             );
                           } else {
-                            return buildNotificationCard(notificationData);
+                            return buildNotificationCard(
+                                notificationData, index);
                           }
                         },
                         separatorBuilder: (context, index) =>
@@ -463,7 +529,7 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  Widget buildNotificationCard(Map<String, dynamic> notificationData) {
+  Widget buildNotificationCard(Map<String, dynamic> notificationData, index) {
     return InkWell(
       onTap: () {
         if (notificationData.containsKey('postid')) {
@@ -533,7 +599,51 @@ class _NotificationScreenState extends State<NotificationScreen>
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                          'Delete this notification',
+                          style: TextStyle(color: cGreen),
+                        ),
+                        content: const Text(
+                            'Do you want to delete this notification?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () async {
+                              FirebaseFirestore.instance
+                                  .collection("activitesNotifications")
+                                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                                  .collection("notifications")
+                                  .doc(notificationData['notificationId'])
+                                  .delete();
+                              setState(() {
+                                notifications.remove(index);
+                              });
+
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'Delete',
+                              style: TextStyle(color: cGreen),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 icon: const Icon(Icons.more_horiz),
               ),
             ],

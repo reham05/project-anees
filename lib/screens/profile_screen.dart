@@ -170,6 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               child: Center(
                                 child: CircleAvatar(
+                                  backgroundColor: cGreen2,
                                   radius: 57.r,
                                   backgroundImage: NetworkImage(userImage),
                                 ),
@@ -578,6 +579,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       Row(
                                                         children: [
                                                           CircleAvatar(
+                                                            backgroundColor: cGreen2,
                                                             radius: 22.r,
                                                             backgroundImage:
                                                                 NetworkImage(

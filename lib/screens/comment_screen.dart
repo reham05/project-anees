@@ -168,6 +168,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                     style: GoogleFonts.inter(fontSize: 12.sp),
                                   ),
                                   leading: CircleAvatar(
+                                    backgroundColor: cGreen2,
                                     radius: 20.r,
                                     backgroundImage: NetworkImage(
                                         commentMap['userImage'] ?? ''),
@@ -191,6 +192,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     child: Row(
                       children: [
                         CircleAvatar(
+                          backgroundColor: cGreen2,
                           radius: 25.r,
                           backgroundImage:
                               NetworkImage(userData['profile_picture_url']),
@@ -225,7 +227,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                         log(e.toString());
                                       }
                                     },
-                                    icon: const Icon(Icons.send)),
+                                    icon: const Icon(Icons.send,
+                                        color: Colors.black)),
                                 hintText: "add commment",
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),

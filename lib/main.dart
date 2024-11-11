@@ -3,6 +3,7 @@
 // ignore_for_file: unused_import
 
 import 'package:anees/screens/about_app_screen.dart';
+import 'package:anees/screens/about_book_screen.dart';
 import 'package:anees/screens/account_confirmation_screen.dart';
 import 'package:anees/screens/account_screen.dart';
 import 'package:anees/screens/add_book.dart';
@@ -11,6 +12,7 @@ import 'package:anees/screens/delete_posts_screen.dart';
 import 'package:anees/screens/forgot_password_screen.dart';
 import 'package:anees/screens/home.dart';
 import 'package:anees/screens/home_screen.dart';
+import 'package:anees/screens/pdf_view_screen.dart';
 import 'package:anees/screens/pick_screen.dart';
 import 'package:anees/screens/posts_screen.dart';
 import 'package:anees/screens/room_chat_screen.dart';
@@ -26,6 +28,7 @@ import 'firebase_options.dart';
 
 import 'screens/add_post_screen.dart';
 import 'screens/authors_screen.dart';
+import 'screens/book_details_screen.dart';
 import 'screens/comment_screen.dart';
 import 'screens/postdetails_screen.dart';
 import 'screens/privacy_policy.dart';
@@ -70,8 +73,9 @@ class MyApp extends StatelessWidget {
               title: 'Anees',
               theme: ThemeData(
                 useMaterial3: true,
+                
               ),
-              home: const Home());
+              home: const AddBook());
         });
   }
 }

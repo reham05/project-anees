@@ -55,6 +55,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CircleAvatar(
+              // backgroundColor: cGreen2,
               radius: 20.r,
               backgroundImage: NetworkImage(widget.userImage),
             ),

@@ -329,6 +329,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     Row(
                                                       children: [
                                                         CircleAvatar(
+                                                          backgroundColor: cGreen2,
                                                           radius: 22.r,
                                                           backgroundImage:
                                                               NetworkImage(
@@ -453,6 +454,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       Row(
                                                         children: [
                                                           CircleAvatar(
+                                                            backgroundColor: cGreen2,
                                                             radius: 22.r,
                                                             backgroundImage:
                                                                 NetworkImage(
@@ -577,6 +579,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       Row(
                                                         children: [
                                                           CircleAvatar(
+                                                            backgroundColor: cGreen2,
                                                             radius: 22.r,
                                                             backgroundImage:
                                                                 NetworkImage(

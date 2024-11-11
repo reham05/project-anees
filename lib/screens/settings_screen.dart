@@ -70,8 +70,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const Divider(),
               BuildSettingItem(
                 onTap: () {},
-                icon: Icons.translate_rounded,
-                title: "Change Language",
+                icon: Icons.lock_outline,
+                title: "Change Password",
               ),
               const Divider(),
               BuildSettingItem(

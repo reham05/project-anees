@@ -34,7 +34,22 @@ class _AccountScreenState extends State<AccountScreen> {
   final TextEditingController _email = TextEditingController();
   String? _userType;
   String? _userImage;
-
+  String? _selectedCity;
+  String? _selectedRegion;
+  final List<String> _cities = [
+    "Riyadh",
+    "Jeddah",
+    "Dammam",
+    "Mecca",
+    "Medina"
+  ];
+  final Map<String, List<String>> _regions = {
+    "Riyadh": ["Al Olaya", "Al Malaz", "Al Murabba"],
+    "Jeddah": ["Al Hamra", "Al Rawdah", "Al Shate'a"],
+    "Dammam": ["Al Faisaliah", "Al Shati Al Gharbi", "Al Mazrouia"],
+    "Mecca": ["Al Aziziyah", "Al Mansoor", "Al Shoqiyah"],
+    "Medina": ["Al Uyun", "Al Khalidiyah", "Al Qiblatayn"],
+  };
   Future<void> _getCurrentUserData() async {
     try {
       var userId = FirebaseAuth.instance.currentUser!.uid;
@@ -48,6 +63,8 @@ class _AccountScreenState extends State<AccountScreen> {
         _email.text = userData['email'];
         _userType = userData['userType'];
         _userImage = userData['profile_picture_url'];
+        _selectedCity = userData['city'];
+        _selectedRegion = userData['region'];
         msg = "successful";
         loadingPage = false;
       });
@@ -201,8 +218,12 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  Future<void> _updateUserData(
-      {required String fullName, required userType}) async {
+  Future<void> _updateUserData({
+    required String fullName,
+    required userType,
+    required String city,
+    required String region,
+  }) async {
     setState(() {
       btnIsLoading = true;
     });
@@ -213,6 +234,8 @@ class _AccountScreenState extends State<AccountScreen> {
           .update({
         'fullName': fullName,
         'userType': userType,
+        'city': city,
+        'region': region,
       });
       setState(() {
         _fullName.text = fullName;
@@ -443,6 +466,142 @@ class _AccountScreenState extends State<AccountScreen> {
                                   SizedBox(
                                     height: 5.h,
                                   ),
+                                  Text("  City",
+                                      style: GoogleFonts.inter(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13.sp)),
+                                  SizedBox(
+                                    height: 4.h,
+                                  ),
+                                  DropdownButtonFormField<String>(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "This field must not be empty";
+                                      }
+                                      return null;
+                                    },
+                                    value: _selectedCity,
+                                    hint: const Text("Select city"),
+                                    dropdownColor: cWhite,
+                                    style: GoogleFonts.inter(
+                                        color: cGreen,
+                                        fontSize: 13.sp,
+                                        fontWeight: FontWeight.w400),
+                                    items: _cities.map((city) {
+                                      return DropdownMenuItem(
+                                        value: city,
+                                        child: Text(city),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedCity = value;
+                                        _selectedRegion = null;
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 12),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(36.0),
+                                        borderSide: const BorderSide(
+                                          color: cGrey,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(36.0),
+                                        borderSide: const BorderSide(
+                                          color: cGrey,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(36.0),
+                                        borderSide: const BorderSide(
+                                          color: cGreen,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 4.h,
+                                  ),
+                                  Text("  Region",
+                                      style: GoogleFonts.inter(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13.sp)),
+                                  SizedBox(
+                                    height: 4.h,
+                                  ),
+                                  DropdownButtonFormField<String>(
+                                    value: _selectedRegion,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "This field must not be empty";
+                                      }
+                                      return null;
+                                    },
+                                    hint: const Text("Select region"),
+                                    style: GoogleFonts.inter(
+                                        color: cGreen,
+                                        fontSize: 13.sp,
+                                        fontWeight: FontWeight.w400),
+                                    dropdownColor: cWhite,
+                                    items: _selectedCity != null
+                                        ? _regions[_selectedCity]!
+                                            .map((region) {
+                                            return DropdownMenuItem(
+                                              value: region,
+                                              child: Text(region),
+                                            );
+                                          }).toList()
+                                        : [],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedRegion = value;
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 12),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(36.0),
+                                        borderSide: const BorderSide(
+                                          color: cGrey,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(36.0),
+                                        borderSide: const BorderSide(
+                                          color: cGrey,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(36.0),
+                                        borderSide: const BorderSide(
+                                          color: cGreen,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
                                   Text(
                                     "  Email",
                                     style: GoogleFonts.inter(
@@ -476,7 +635,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                         if (_formKey.currentState!.validate()) {
                                           _updateUserData(
                                               fullName: _fullName.text,
-                                              userType: _userType);
+                                              userType: _userType,
+                                              city: _selectedCity!,
+                                              region: _selectedRegion!);
                                         }
                                       },
                                       child: btnIsLoading

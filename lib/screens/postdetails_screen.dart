@@ -110,6 +110,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           child: Row(
                             children: [
                               CircleAvatar(
+                                backgroundColor: cGreen2,
                                 radius: 22.r,
                                 backgroundImage: NetworkImage(
                                     postDetails!['userImage'] ?? ''),
@@ -206,6 +207,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                               },
                               child: ListTile(
                                 leading: CircleAvatar(
+                                  backgroundColor: cGreen2,
                                   backgroundImage: NetworkImage(
                                       commentData['userImage'] ?? ''),
                                 ),

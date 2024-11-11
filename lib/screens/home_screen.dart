@@ -190,71 +190,71 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: filters.length),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Most Searched",
-                          style: GoogleFonts.roboto(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w700,
-                              color: cGreen),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 40.h,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) => Container(
-                                height: 40.h,
-                                // width: 120.w,
-                                decoration: index == 0
-                                    ? BoxDecoration(
-                                        borderRadius: BorderRadius.circular(40),
-                                        gradient: const LinearGradient(
-                                          colors: [
-                                            Color(0xFF77B0AA),
-                                            Color(0xFF003C43)
-                                          ],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                        ),
-                                      )
-                                    : BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Colors.grey.shade500,
-                                          width: 1.5,
-                                        ),
-                                        borderRadius: BorderRadius.circular(40),
-                                      ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Center(
-                                      child: Text(
-                                    mostSearch[index],
-                                    style: GoogleFonts.poly(
-                                      color: index == 0
-                                          ? cWhite
-                                          : Colors.grey.shade500,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14.sp,
-                                    ),
-                                  )),
-                                ),
-                              ),
-                          separatorBuilder: (context, index) => SizedBox(
-                                width: 15.w,
-                              ),
-                          itemCount: mostSearch.length),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(
+                  //         "Most Searched",
+                  //         style: GoogleFonts.roboto(
+                  //             fontSize: 13.sp,
+                  //             fontWeight: FontWeight.w700,
+                  //             color: cGreen),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: SizedBox(
+                  //     height: 40.h,
+                  //     child: ListView.separated(
+                  //         scrollDirection: Axis.horizontal,
+                  //         itemBuilder: (context, index) => Container(
+                  //               height: 40.h,
+                  //               // width: 120.w,
+                  //               decoration: index == 0
+                  //                   ? BoxDecoration(
+                  //                       borderRadius: BorderRadius.circular(40),
+                  //                       gradient: const LinearGradient(
+                  //                         colors: [
+                  //                           Color(0xFF77B0AA),
+                  //                           Color(0xFF003C43)
+                  //                         ],
+                  //                         begin: Alignment.topCenter,
+                  //                         end: Alignment.bottomCenter,
+                  //                       ),
+                  //                     )
+                  //                   : BoxDecoration(
+                  //                       color: Colors.white,
+                  //                       border: Border.all(
+                  //                         color: Colors.grey.shade500,
+                  //                         width: 1.5,
+                  //                       ),
+                  //                       borderRadius: BorderRadius.circular(40),
+                  //                     ),
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(10.0),
+                  //                 child: Center(
+                  //                     child: Text(
+                  //                   mostSearch[index],
+                  //                   style: GoogleFonts.poly(
+                  //                     color: index == 0
+                  //                         ? cWhite
+                  //                         : Colors.grey.shade500,
+                  //                     fontWeight: FontWeight.w400,
+                  //                     fontSize: 14.sp,
+                  //                   ),
+                  //                 )),
+                  //               ),
+                  //             ),
+                  //         separatorBuilder: (context, index) => SizedBox(
+                  //               width: 15.w,
+                  //             ),
+                  //         itemCount: mostSearch.length),
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Row(
