@@ -126,7 +126,7 @@ class _AddBookState extends State<AddBook> {
   bool btnIsLoading = false;
   File? pickedImage;
   String? _selectedCategory;
-  File? _selectedFile;
+  // File? _selectedFile;
 
   TextEditingController bookTitle = TextEditingController();
   TextEditingController numberOfPages = TextEditingController();
@@ -143,26 +143,26 @@ class _AddBookState extends State<AddBook> {
     });
   }
 
-  Future<void> pickPDFFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf'],
-    );
+  // Future<void> pickPDFFile() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['pdf'],
+  //   );
 
-    if (result != null) {
-      final filePath = result.files.single.path;
+  //   if (result != null) {
+  //     final filePath = result.files.single.path;
 
-      if (filePath != null) {
-        setState(() {
-          _selectedFile = File(filePath);
-        });
-      } else {
-        log("File path is null.");
-      }
-    } else {
-      log("No file selected.");
-    }
-  }
+  //     if (filePath != null) {
+  //       setState(() {
+  //         _selectedFile = File(filePath);
+  //       });
+  //     } else {
+  //       log("File path is null.");
+  //     }
+  //   } else {
+  //     log("No file selected.");
+  //   }
+  // }
 
   Future<void> uploadPDFToFirebase({
     required String bookTitle,
@@ -172,77 +172,73 @@ class _AddBookState extends State<AddBook> {
     required String authorName,
     required String category,
   }) async {
-    if (_selectedFile != null) {
-      setState(() {
-        btnIsLoading = true;
-      });
-      try {
-        final uuid = const Uuid().v4();
-        String? imageUrl = '';
-        if (pickedImage != null) {
-          final rref = FirebaseStorage.instance
-              .ref()
-              .child('books/')
-              .child('$uuid/${uuid}jpg');
-          await rref.putFile(pickedImage!);
-          imageUrl = await rref.getDownloadURL();
-        }
-        final ref = FirebaseStorage.instance
+    setState(() {
+      btnIsLoading = true;
+    });
+    try {
+      final uuid = const Uuid().v4();
+      String? imageUrl = '';
+      if (pickedImage != null) {
+        final rref = FirebaseStorage.instance
             .ref()
-            .child('books/$uuid/${_selectedFile!.uri.pathSegments.last}');
-        await ref.putFile(_selectedFile!);
+            .child('books/')
+            .child('$uuid/${uuid}jpg');
+        await rref.putFile(pickedImage!);
+        imageUrl = await rref.getDownloadURL();
+      }
+      // final ref = FirebaseStorage.instance
+      //     .ref()
+      //     .child('books/$uuid/${_selectedFile!.uri.pathSegments.last}');
+      // await ref.putFile(_selectedFile!);
 
-        final url = await ref.getDownloadURL();
+      // final url = await ref.getDownloadURL();
 
-        await FirebaseFirestore.instance.collection('books').doc(uuid).set({
-          'bookid': uuid,
-          'title': bookTitle,
-          'description': bookDescription,
-          'numOfPages': numberOfPages,
-          'written': written,
-          'urlBook': url,
-          'urlBookCover': imageUrl,
-          'authorid': FirebaseAuth.instance.currentUser!.uid,
-          'authorName': authorName,
-          'category': category,
-          'uploadDate': Timestamp.now(),
-        });
+      await FirebaseFirestore.instance.collection('books').doc(uuid).set({
+        'bookid': uuid,
+        'title': bookTitle,
+        'description': bookDescription,
+        'numOfPages': numberOfPages,
+        'written': written,
+        // 'urlBook': url,
+        'urlBookCover': imageUrl,
+        'authorid': FirebaseAuth.instance.currentUser!.uid,
+        'authorName': authorName,
+        'category': category,
+        'uploadDate': Timestamp.now(),
+      });
 
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: cGreen,
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: cGreen,
+          content: Text(
+            'The book has been added successfully',
+            style: GoogleFonts.inter(
+              color: cWhite,
+              fontWeight: FontWeight.bold,
+              fontSize: 13.sp,
+            ),
+          )));
+      setState(() {
+        btnIsLoading = false;
+      });
+    } catch (e) {
+      log("Error uploading file: $e");
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red,
             content: Text(
-              'The book has been added successfully',
+              'Something went wrong, please try again',
               style: GoogleFonts.inter(
                 color: cWhite,
                 fontWeight: FontWeight.bold,
                 fontSize: 13.sp,
               ),
-            )));
-        setState(() {
-          btnIsLoading = false;
-        });
-      } catch (e) {
-        log("Error uploading file: $e");
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(
-                'Something went wrong, please try again',
-                style: GoogleFonts.inter(
-                  color: cWhite,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13.sp,
-                ),
-              )),
-        );
-        setState(() {
-          btnIsLoading = false;
-        });
-      }
-    } else {
-      log("No file selected to upload.");
+            )),
+      );
+      setState(() {
+        btnIsLoading = false;
+      });
     }
   }
 
@@ -535,27 +531,27 @@ class _AddBookState extends State<AddBook> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: WidgetStatePropertyAll(
-                                    Colors.grey.shade200)),
-                            onPressed: pickPDFFile,
-                            child: const Text("Choose PDF File"),
-                          ),
-                          SizedBox(width: 5.w),
-                          _selectedFile != null
-                              ? Expanded(
-                                  child: Text(
-                                      "Selected File: ${_selectedFile!.uri.pathSegments.last}"),
-                                )
-                              : const Text("No file selected"),
-                        ],
-                      ),
+                      // SizedBox(
+                      //   height: 4.h,
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     ElevatedButton(
+                      //       style: ButtonStyle(
+                      //           backgroundColor: WidgetStatePropertyAll(
+                      //               Colors.grey.shade200)),
+                      //       onPressed: pickPDFFile,
+                      //       child: const Text("Choose PDF File"),
+                      //     ),
+                      //     SizedBox(width: 5.w),
+                      //     _selectedFile != null
+                      //         ? Expanded(
+                      //             child: Text(
+                      //                 "Selected File: ${_selectedFile!.uri.pathSegments.last}"),
+                      //           )
+                      //         : const Text("No file selected"),
+                      //   ],
+                      // ),
                       SizedBox(
                         height: 4.h,
                       ),
@@ -579,18 +575,6 @@ class _AddBookState extends State<AddBook> {
                                         backgroundColor: Colors.red,
                                         content: Text(
                                           'You must choose a book cover',
-                                          style: GoogleFonts.inter(
-                                            color: cWhite,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13.sp,
-                                          ),
-                                        )));
-                              } else if (_selectedFile == null) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                        backgroundColor: Colors.red,
-                                        content: Text(
-                                          'You must select the book file',
                                           style: GoogleFonts.inter(
                                             color: cWhite,
                                             fontWeight: FontWeight.bold,

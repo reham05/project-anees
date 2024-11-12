@@ -1,3 +1,4 @@
+import 'package:anees/screens/about_book_screen.dart';
 import 'package:anees/screens/room_chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +29,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int? index = 0;
   late int postCount = 0;
   late int followersCount = 0;
+  late int booksCount = 0;
+  late int shelfBooksCount = 0;
   late String fullName = '';
   late String userImage = '';
   late String userid = '';
@@ -35,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late bool infollowing;
   late String myName = '';
   late String myImage = '';
+  late String userType = '';
   Future<void> fetchCurrentUser() async {
     var snapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -43,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     following = snapshot.data()!['following'];
     myName = snapshot.data()!['fullName'];
     myImage = snapshot.data()!['profile_picture_url'];
+
     infollowing = following.contains(widget.userId);
   }
 
@@ -51,17 +56,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
       pageLoading = true;
     });
     try {
-      var snapPosts = await FirebaseFirestore.instance
-          .collection('posts')
-          .where('uid', isEqualTo: widget.userId)
-          .get();
       var snapUsers = await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.userId)
           .get();
       var userData = snapUsers.data();
       setState(() {
+        userType = userData!['userType'];
+      });
+      var snapPosts = await FirebaseFirestore.instance
+          .collection('posts')
+          .where('uid', isEqualTo: widget.userId)
+          .get();
+
+      if (userType == "Author") {
+        var snapBooks = await FirebaseFirestore.instance
+            .collection('books')
+            .where('authorid', isEqualTo: widget.userId)
+            .get();
+        setState(() {
+          booksCount = snapBooks.docs.length;
+        });
+      } else {
+        final snapShotShelfBook = await FirebaseFirestore.instance
+            .collection("bookshelf")
+            .doc(widget.userId)
+            .collection("books")
+            .get();
+        setState(() {
+          shelfBooksCount = snapShotShelfBook.docs.length;
+        });
+      }
+
+      setState(() {
         postCount = snapPosts.docs.length;
+
         fullName = userData!['fullName'];
         userImage = userData['profile_picture_url'];
         userid = userData['uid'];
@@ -141,12 +170,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 30.h,
                       width: double.infinity,
                     ),
-
-                    // Positioned(
-                    //     child: SafeArea(
-                    //   child: IconButton(
-                    //       onPressed: () {}, icon: const Icon(Icons.arrow_back_ios)),
-                    // )),
                     Positioned(
                       left: 50.w,
                       right: 50.w,
@@ -317,7 +340,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "26",
+                             userType == "Author"? booksCount.toString():shelfBooksCount.toString(),
                               style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w600, fontSize: 14.sp),
                             ),
@@ -393,7 +416,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                           },
                           child: Text(
-                            "Author’s Books",
+                            userType == "Author"
+                                ? "Author’s Books"
+                                : "Book Shelf",
                             style: GoogleFonts.inter(
                                 fontWeight: index == 0
                                     ? FontWeight.bold
@@ -425,62 +450,223 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 index == 0
                     ? Expanded(
-                        child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 5),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0,
-                            childAspectRatio: 0.6,
-                          ),
-                          itemCount: 10,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                  color: cGreen4,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 135.h,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15),
-                                          bottomLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15)),
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            "assets/images/demobook.png"),
-                                        fit: BoxFit.cover,
+                        child: userType == "Author"
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 5),
+                                child: StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('books')
+                                      .where('authorid',
+                                          isEqualTo: widget.userId)
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                          child: CircularProgressIndicator(
+                                        color: cGreen,
+                                      ));
+                                    }
+
+                                    if (!snapshot.hasData ||
+                                        snapshot.data!.docs.isEmpty) {
+                                      return const Center(
+                                          child: Text("No books found"));
+                                    }
+
+                                    var books = snapshot.data!.docs;
+
+                                    return GridView.builder(
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 10.0,
+                                        mainAxisSpacing: 10.0,
+                                        childAspectRatio: 0.6,
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Center(
-                                    child: Expanded(
-                                      child: Text(
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        'Arabistan orchards-1',
-                                        style: GoogleFonts.inter(
+                                      itemCount: books.length,
+                                      itemBuilder: (context, index) {
+                                        var book = books[index];
+
+                                        return InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AboutBookScreen(
+                                                    book: book.data()
+                                                        as Map<String, dynamic>,
+                                                  ),
+                                                ));
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: cGreen4,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: 135.h,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          book['urlBookCover']),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5.h),
+                                                Center(
+                                                  child: Text(
+                                                    book['title'],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: GoogleFonts.inter(
+                                                      color: cGreen,
+                                                      fontSize: 9.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 5),
+                                child: StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection("bookshelf")
+                                      .doc(widget.userId)
+                                      .collection("books")
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                          child: CircularProgressIndicator(
+                                              color: cGreen));
+                                    }
+
+                                    if (!snapshot.hasData ||
+                                        snapshot.data!.docs.isEmpty) {
+                                      return const Center(
+                                          child: Text(
+                                              "No books found"));
+                                    }
+
+                                    List<String> bookIds = snapshot.data!.docs
+                                        .map((doc) => doc.id)
+                                        .toList();
+
+                                    return FutureBuilder<
+                                        List<Map<String, dynamic>>>(
+                                      future: fetchBooksData(bookIds),
+                                      builder: (context, booksSnapshot) {
+                                        if (booksSnapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                              child: CircularProgressIndicator(
                                             color: cGreen,
-                                            fontSize: 9.sp,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                          ));
+                                        }
+
+                                        if (!booksSnapshot.hasData ||
+                                            booksSnapshot.data!.isEmpty) {
+                                          return const Center(
+                                              child: Text(
+                                                  "No book details available"));
+                                        }
+
+                                        List<Map<String, dynamic>> books =
+                                            booksSnapshot.data!;
+
+                                        return GridView.builder(
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            crossAxisSpacing: 10.0,
+                                            mainAxisSpacing: 10.0,
+                                            childAspectRatio: 0.6,
+                                          ),
+                                          itemCount: books.length,
+                                          itemBuilder: (context, index) {
+                                            var book = books[index];
+
+                                            return InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AboutBookScreen(
+                                                              book: book),
+                                                    ));
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: cGreen4,
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      height: 135.h,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                        image: DecorationImage(
+                                                          image: NetworkImage(book[
+                                                              'urlBookCover']),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5.h),
+                                                    Center(
+                                                      child: Text(
+                                                        book['title'],
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                        style:
+                                                            GoogleFonts.inter(
+                                                          color: cGreen,
+                                                          fontSize: 9.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
-                            );
-                          },
-                        ),
-                      ))
+                      )
                     : StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection('posts')
@@ -579,7 +765,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       Row(
                                                         children: [
                                                           CircleAvatar(
-                                                            backgroundColor: cGreen2,
+                                                            backgroundColor:
+                                                                cGreen2,
                                                             radius: 22.r,
                                                             backgroundImage:
                                                                 NetworkImage(
@@ -786,4 +973,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           );
   }
+}
+
+Future<List<Map<String, dynamic>>> fetchBooksData(List<String> bookIds) async {
+  List<Map<String, dynamic>> books = [];
+
+  for (String bookId in bookIds) {
+    final bookSnapshot =
+        await FirebaseFirestore.instance.collection("books").doc(bookId).get();
+    if (bookSnapshot.exists) {
+      books.add(bookSnapshot.data() as Map<String, dynamic>);
+    }
+  }
+  return books;
 }

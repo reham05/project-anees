@@ -6,8 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 class BookDetailsScreen extends StatefulWidget {
-  const BookDetailsScreen({super.key});
-
+  const BookDetailsScreen({super.key, this.book});
+  final Map<String, dynamic>? book;
   @override
   State<BookDetailsScreen> createState() => _BookDetailsScreenState();
 }
@@ -40,13 +40,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                             Icons.arrow_back_ios,
                             color: cGreen,
                           )),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const HugeIcon(
-                          icon: HugeIcons.strokeRoundedBook01,
-                          color: cGreen,
-                        ),
-                      )
+                      // IconButton(
+                      //   onPressed: () {},
+                      //   icon: const HugeIcon(
+                      //     icon: HugeIcons.strokeRoundedBook01,
+                      //     color: cGreen,
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -61,8 +61,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         width: 90.w,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            image: const DecorationImage(
-                              image: AssetImage("assets/images/Frame-50.png"),
+                            image: DecorationImage(
+                              image: NetworkImage(widget.book!['urlBookCover']),
                               fit: BoxFit.fill,
                             )),
                       ),
@@ -74,7 +74,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                 ),
                 Center(
                   child: Text(
-                    "Morning and evening talk",
+                    widget.book!['title'],
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
                     ),
@@ -82,56 +82,59 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                 ),
                 Center(
                   child: Text(
-                    "Naguib Mahfouz",
+                    widget.book!['authorName'],
                     style: GoogleFonts.inter(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey.shade500),
                   ),
                 ),
+                // SizedBox(
+                //   height: 60.h,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const NewWidget(
+                //       text: "Fiction",
+                //     ),
+                //     SizedBox(
+                //       width: 5.w,
+                //     ),
+                //     const NewWidget(
+                //       text: "Classics",
+                //     ),
+                //     SizedBox(
+                //       width: 5.w,
+                //     ),
+                //     const NewWidget(
+                //       text: "Novel",
+                //     )
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: 10.h,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const NewWidget(
+                //       text: "English",
+                //     ),
+                //     SizedBox(
+                //       width: 5.w,
+                //     ),
+                //     const NewWidget(
+                //       text: "Arabic",
+                //     ),
+                //   ],
+                // ),
                 SizedBox(
-                  height: 60.h,
+                  height: 35.h,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const NewWidget(
-                      text: "Fiction",
-                    ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    const NewWidget(
-                      text: "Classics",
-                    ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    const NewWidget(
-                      text: "Novel",
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const NewWidget(
-                      text: "English",
-                    ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    const NewWidget(
-                      text: "Arabic",
-                    ),
-                  ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-                  child: Divider(),
-                ),
+                // const Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                //   child: Divider(),
+                // ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8.0, vertical: 0.0),
