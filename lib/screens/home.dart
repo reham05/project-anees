@@ -26,7 +26,9 @@ class _HomeState extends State<Home> {
     const ChatScreen(),
     const PostsScreen(),
     const ShowOptions(),
-    const NotificationScreen(),
+    const NotificationScreen(
+      fromHomeScreen: true,
+    ),
     ProfileScreen(
       userId: FirebaseAuth.instance.currentUser!.uid,
       fromHome: true,

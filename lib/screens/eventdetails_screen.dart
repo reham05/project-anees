@@ -143,6 +143,34 @@ class _EventdetailsScreenState extends State<EventdetailsScreen> {
                     fontSize: 13.sp),
               ),
               Text(
+                "Address:",
+                style: GoogleFonts.inter(
+                    color: Colors.grey.shade500,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.sp),
+              ),
+              Text(
+                widget.eventdetails['address'],
+                style: GoogleFonts.inter(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13.sp),
+              ),
+                 Text(
+                "Language:",
+                style: GoogleFonts.inter(
+                    color: Colors.grey.shade500,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.sp),
+              ),
+              Text(
+                widget.eventdetails['langauge'],
+                style: GoogleFonts.inter(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13.sp),
+              ),
+              Text(
                 "Event Details:",
                 style: GoogleFonts.inter(
                     color: Colors.grey.shade500,
@@ -156,6 +184,7 @@ class _EventdetailsScreenState extends State<EventdetailsScreen> {
                     fontWeight: FontWeight.w500,
                     fontSize: 13.sp),
               ),
+           
             ],
           ),
         ),

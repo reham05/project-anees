@@ -149,4 +149,50 @@ class FirestoreMethod {
           FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
     });
   }
+
+  addFeedBacks(
+      {required feedback,
+      required userimage,
+      required uid,
+      required bookid,
+      required fullName,
+      required bookAuthorId,
+      required book}) async {
+    try {
+      // ignore: prefer_const_constructors
+      final feedbackid = Uuid().v4();
+      await FirebaseFirestore.instance.collection('books').doc(bookid)
+        ..collection('feedbacks').doc(feedbackid).set({
+          'fullName': fullName,
+          'feedback': feedback,
+          'userImage': userimage,
+          'bookid': bookid,
+          'feedbackid': feedbackid,
+          'uid': uid,
+          'bookAuthorId': bookAuthorId,
+          'date': Timestamp.now(),
+        });
+      if (FirebaseAuth.instance.currentUser!.uid != bookAuthorId) {
+        final notificationId = Uuid().v4();
+        await FirebaseFirestore.instance
+            .collection("activitesNotifications")
+            .doc(bookAuthorId)
+            .collection("notifications")
+            .doc(notificationId)
+            .set({
+          'uid': FirebaseAuth.instance.currentUser!.uid,
+          'userImage': userimage,
+          'fullName': fullName,
+          'bookid': bookid,
+          'notifiactionTitle': "gave feedback on your book",
+          'date': Timestamp.now(),
+          'newNotification': true,
+          'notificationId': notificationId,
+          'book': book
+        });
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }

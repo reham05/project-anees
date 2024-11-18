@@ -12,6 +12,7 @@ import '../utils/colors.dart';
 class AboutBookScreen extends StatefulWidget {
   const AboutBookScreen({super.key, this.book});
   final Map<String, dynamic>? book;
+
   @override
   State<AboutBookScreen> createState() => _AboutBookScreenState();
 }
@@ -91,11 +92,9 @@ class _AboutBookScreenState extends State<AboutBookScreen> {
                                 .doc(widget.book!['bookid'])
                                 .delete();
                             setState(() {
-                              inShelf =
-                                  false; 
+                              inShelf = false;
                             });
                           } else {
-                           
                             await FirebaseFirestore.instance
                                 .collection("bookshelf")
                                 .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -103,8 +102,7 @@ class _AboutBookScreenState extends State<AboutBookScreen> {
                                 .doc(widget.book!['bookid'])
                                 .set({'bookid': widget.book!['bookid']});
                             setState(() {
-                              inShelf =
-                                  true; 
+                              inShelf = true;
                             });
                           }
                         } on Exception catch (e) {
@@ -152,6 +150,18 @@ class _AboutBookScreenState extends State<AboutBookScreen> {
                           ),
                           SizedBox(
                             height: 5.h,
+                          ),
+                          Text(
+                            widget.book!['title'],
+                            style: GoogleFonts.inter(
+                                color: cGreen,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            widget.book!['authorName'],
+                            style: GoogleFonts.inter(
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w200),
                           ),
                           TextButton(
                               style: const ButtonStyle(
@@ -207,6 +217,8 @@ class _AboutBookScreenState extends State<AboutBookScreen> {
                             ),
                             Text(
                               widget.book!['description'],
+                              maxLines: 6,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(
                                   color: cWhite,
                                   fontSize: 13.sp,
@@ -253,6 +265,23 @@ class _AboutBookScreenState extends State<AboutBookScreen> {
                                       fontWeight: FontWeight.w200),
                                 ),
                               ],
+                            ),
+                            const Divider(
+                              color: cWhite,
+                            ),
+                            Text(
+                              "Bookstore Address: ",
+                              style: GoogleFonts.inter(
+                                  color: cWhite,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              widget.book!['bookstoreAddress'],
+                              style: GoogleFonts.inter(
+                                  color: cWhite,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w200),
                             ),
                           ],
                         ),

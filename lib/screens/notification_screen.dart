@@ -12,10 +12,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../data/models/notification_item.dart';
 import '../utils/colors.dart';
+import 'book_details_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
-
+  const NotificationScreen({super.key, this.fromHomeScreen = true});
+  final bool? fromHomeScreen;
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
@@ -169,7 +170,20 @@ class _NotificationScreenState extends State<NotificationScreen>
                       "assets/images/Ellipse-005.svg",
                       fit: BoxFit.fill,
                     ),
-                  ))
+                  )),
+              widget.fromHomeScreen!
+                  ? const SizedBox.shrink()
+                  : Positioned(
+                      top: 25.h,
+                      left: 10.w,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: cGreen,
+                          ))),
             ],
           ),
           SizedBox(
@@ -336,8 +350,9 @@ class _NotificationScreenState extends State<NotificationScreen>
                                                                       13.sp),
                                                         ),
                                                         TextSpan(
-                                                          text: notificationData[
-                                                              'notifiactionTitle'],
+                                                          text:
+                                                              notificationData[
+                                                                  'eventTitle'],
                                                           style:
                                                               GoogleFonts.inter(
                                                                   fontStyle:
@@ -488,7 +503,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   ),
                                 ),
                                 SizedBox(height: 5.h),
-                                buildNotificationCard(notificationData, index),
+                                buildNotificationCard(
+                                    notificationData, index, context),
                               ],
                             );
                           } else if (!notificationData['isNew'] &&
@@ -506,12 +522,13 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   ),
                                 ),
                                 SizedBox(height: 5.h),
-                                buildNotificationCard(notificationData, index),
+                                buildNotificationCard(
+                                    notificationData, index, context),
                               ],
                             );
                           } else {
                             return buildNotificationCard(
-                                notificationData, index);
+                                notificationData, index, context);
                           }
                         },
                         separatorBuilder: (context, index) =>
@@ -529,7 +546,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  Widget buildNotificationCard(Map<String, dynamic> notificationData, index) {
+  Widget buildNotificationCard(
+      Map<String, dynamic> notificationData, index, BuildContext context) {
     return InkWell(
       onTap: () {
         if (notificationData.containsKey('postid')) {
@@ -538,6 +556,13 @@ class _NotificationScreenState extends State<NotificationScreen>
               MaterialPageRoute(
                   builder: (context) =>
                       PostDetailScreen(postId: notificationData['postid'])));
+        } else if (notificationData.containsKey('bookid')) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BookDetailsScreen(
+                        book: notificationData['book'],
+                      )));
         } else {
           Navigator.push(
               context,

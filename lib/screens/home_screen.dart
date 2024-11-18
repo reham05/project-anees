@@ -19,6 +19,10 @@ import 'book_details_screen.dart';
 import 'profile_screen.dart';
 import 'package:http/http.dart' as http;
 
+import 'search_screen.dart';
+import 'view_all_recomandation_boosk.dart';
+import 'view_books_with_filter.dart';
+
 const filters = [
   {'image': "assets/images/poetry.png", 'text': "Poetry"},
   {'image': "assets/images/business.png", 'text': "Business"},
@@ -41,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool pageLoading = true;
   int index = 1;
   var uid = FirebaseAuth.instance.currentUser!.uid;
-
+  late Map<String, dynamic> recommendBooks;
   late Future<List<String>> recommendedBookIds;
   late Future<List<Map<String, dynamic>>> booksData;
 
@@ -111,12 +115,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
         if (docSnapshot.exists) {
           log('Found data for book ID: $bookId');
-          final bookData =
-              docSnapshot.data(); // استرجاع البيانات كـ Map<String, dynamic>
+          final bookData = docSnapshot.data();
           log('Book Data: $bookData');
 
           if (bookData != null) {
-            books.add(bookData); // أضف البيانات إلى القائمة
+            books.add(bookData);
             log('Book Map: $bookData');
           }
         } else {
@@ -253,8 +256,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Txtformfield(
+                        Txtformfield(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      MultiCollectionSearchPage(),
+                                ));
+                          },
                           text: "Search for books, Author, Reader..",
+                          readOnly: true,
                           suffixIcon: Icons.search_rounded,
                         ),
                         SizedBox(
@@ -268,7 +280,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, index) {
                                   return InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ViewBooksWithFilter(
+                                              category: filters[index]['text'],
+                                            ),
+                                          ));
+                                    },
                                     child: Container(
                                       height: 70.h,
                                       width: 85.w,
@@ -307,24 +328,36 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Books",
+                                "Recommended Books",
                                 style: GoogleFonts.roboto(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w700,
                                     color: cGreen),
                               ),
-                              Row(
-                                children: [
-                                  Text("More",
-                                      style: GoogleFonts.inter(
-                                          color: Colors.grey.shade700,
-                                          fontSize: 11.sp)),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 12.sp,
-                                    color: Colors.grey.shade700,
-                                  )
-                                ],
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ViewAllRecomandationBoosk(
+                                          booksData: booksData,
+                                        ),
+                                      ));
+                                },
+                                child: Row(
+                                  children: [
+                                    Text("More",
+                                        style: GoogleFonts.inter(
+                                            color: Colors.grey.shade700,
+                                            fontSize: 11.sp)),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 12.sp,
+                                      color: Colors.grey.shade700,
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -345,6 +378,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return const Center(child: Text('Error'));
                                   }
                                   booksData = fetchBooksData(snapshot.data!);
+
                                   return FutureBuilder<
                                       List<Map<String, dynamic>>>(
                                     future: booksData,

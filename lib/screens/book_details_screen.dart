@@ -1,9 +1,12 @@
+import 'package:anees/screens/add_feedback_screen.dart';
 import 'package:anees/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:intl/intl.dart';
 
 class BookDetailsScreen extends StatefulWidget {
   const BookDetailsScreen({super.key, this.book});
@@ -148,7 +151,17 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                             color: cGreen, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddFeedbackScreen(
+                                    bookUserid: widget.book!['authorid'],
+                                    bookid: widget.book!['bookid'],
+                                    book: widget.book,
+                                  ),
+                                ));
+                          },
                           icon: const Icon(
                             Icons.add_comment,
                             color: cGreen,
@@ -157,48 +170,52 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: cGreen4,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: ListTile(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('books')
+                        .doc(widget.book!['bookid'])
+                        .collection('feedbacks')
+                        .orderBy("date", descending: true)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return const Center(child: Text("No Feedbacks yet"));
+                      }
+                      return ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          Map<String, dynamic> feedbackData =
+                              snapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>;
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: cGreen2,
+                              backgroundImage:
+                                  NetworkImage(feedbackData['userImage'] ?? ''),
+                            ),
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Text(feedbackData['fullName']),
                                 Text(
-                                  "Khaled Abubakr",
-                                  style: GoogleFonts.inter(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Text(
-                                  "5 Nov",
+                                  DateFormat.MMMEd()
+                                      .format(feedbackData['date'].toDate()),
                                   style: GoogleFonts.inter(
                                       fontSize: 10.sp,
                                       fontWeight: FontWeight.w400),
                                 )
                               ],
                             ),
-                            subtitle: Text(
-                              "commentMap['comment']",
-                              style: GoogleFonts.inter(fontSize: 12.sp),
-                            ),
-                            leading: CircleAvatar(
-                              backgroundColor: cGreen2,
-                              radius: 20.r,
-                              backgroundImage: const NetworkImage(""),
-                            ),
-                          ),
-                        ),
+                            subtitle: Text(feedbackData['feedback']),
+                          );
+                        },
                       );
                     },
                   ),
-                )
+                ),
               ],
             ),
           ),

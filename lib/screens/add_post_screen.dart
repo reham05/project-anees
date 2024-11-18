@@ -25,6 +25,7 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController description = TextEditingController();
   bool btnIsLoading = false;
   File? pickedImage;
@@ -128,73 +129,94 @@ class _AddPostScreenState extends State<AddPostScreen> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.cancel,
-                            color: cGreen,
-                            size: 26.sp,
-                          )),
-                      Text(
-                        "New Post",
-                        style: GoogleFonts.inter(
-                            fontSize: 18.sp,
-                            color: cGreen,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      TextButton(
-                          onPressed: upload_post,
-                          child: btnIsLoading
-                              ? SizedBox(
-                                  height: 20.h,
-                                  width: 20.w,
-                                  child: CircularProgressIndicator(
-                                    color: cWhite,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.cancel,
+                              color: cGreen,
+                              size: 26.sp,
+                            )),
+                        Text(
+                          "New Post",
+                          style: GoogleFonts.inter(
+                              fontSize: 18.sp,
+                              color: cGreen,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              if (description.text != null &&
+                                  description.text.isNotEmpty) {
+                                upload_post();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        'This field must not be empty',
+                                        style: GoogleFonts.inter(
+                                          color: cWhite,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13.sp,
+                                        ),
+                                      )),
+                                );
+                              }
+                            },
+                            child: btnIsLoading
+                                ? SizedBox(
+                                    height: 20.h,
+                                    width: 20.w,
+                                    child: CircularProgressIndicator(
+                                      color: cWhite,
+                                    ))
+                                : Text(
+                                    "Next",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 15.sp,
+                                        color: cGreen,
+                                        fontWeight: FontWeight.bold),
                                   ))
-                              : Text(
-                                  "Next",
-                                  style: GoogleFonts.inter(
-                                      fontSize: 15.sp,
-                                      color: cGreen,
-                                      fontWeight: FontWeight.bold),
-                                ))
-                    ],
-                  ),
-                  pickedImage != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SizedBox(
-                            height: height * 0.3,
-                            width: double.infinity,
-                            child: Image.file(
-                              pickedImage!,
-                              fit: BoxFit.fill,
+                      ],
+                    ),
+                    pickedImage != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SizedBox(
+                              height: height * 0.3,
+                              width: double.infinity,
+                              child: Image.file(
+                                pickedImage!,
+                                fit: BoxFit.fill,
+                              ),
                             ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextField(
-                        controller: description,
-                        maxLines: 10,
-                        cursorColor: cGreen,
-                        style: GoogleFonts.rubik(color: cWhite),
-                        decoration: InputDecoration(
-                          hintText: "Typing Post...",
-                          hintStyle:
-                              GoogleFonts.inter(fontStyle: FontStyle.italic),
-                          border: InputBorder.none,
-                        )),
-                  ),
-                ],
+                          )
+                        : const SizedBox.shrink(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TextFormField(
+                          controller: description,
+                          maxLines: 10,
+                          cursorColor: cGreen,
+                          style: GoogleFonts.rubik(color: cWhite),
+                          decoration: InputDecoration(
+                            hintText: "Typing Post...",
+                            hintStyle:
+                                GoogleFonts.inter(fontStyle: FontStyle.italic),
+                            border: InputBorder.none,
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

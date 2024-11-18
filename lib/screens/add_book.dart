@@ -131,6 +131,7 @@ class _AddBookState extends State<AddBook> {
   TextEditingController bookTitle = TextEditingController();
   TextEditingController numberOfPages = TextEditingController();
   TextEditingController bookWritten = TextEditingController();
+  TextEditingController bookStore = TextEditingController();
   TextEditingController description = TextEditingController();
   Future<void> fetchCurrentUser() async {
     var snapshot = await FirebaseFirestore.instance
@@ -171,6 +172,7 @@ class _AddBookState extends State<AddBook> {
     required String written,
     required String authorName,
     required String category,
+    required String bookstoreAddress,
   }) async {
     setState(() {
       btnIsLoading = true;
@@ -204,6 +206,7 @@ class _AddBookState extends State<AddBook> {
         'authorid': FirebaseAuth.instance.currentUser!.uid,
         'authorName': authorName,
         'category': category,
+        'bookstoreAddress': bookstoreAddress,
         'uploadDate': Timestamp.now(),
       });
 
@@ -423,6 +426,27 @@ class _AddBookState extends State<AddBook> {
                         height: 4.h,
                       ),
                       Text(
+                        "  Bookstore address",
+                        style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500, fontSize: 13.sp),
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      Txtformfield(
+                        controller: bookStore,
+                        text: " Enter the address of the bookstore",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "This field must not be empty";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      Text(
                         "  Category",
                         style: GoogleFonts.inter(
                             fontWeight: FontWeight.w500, fontSize: 13.sp),
@@ -588,6 +612,7 @@ class _AddBookState extends State<AddBook> {
                                     bookDescription: description.text,
                                     category: _selectedCategory!,
                                     numberOfPages: numberOfPages.text,
+                                    bookstoreAddress:bookStore.text,
                                     written: bookWritten.text);
                               }
                             }

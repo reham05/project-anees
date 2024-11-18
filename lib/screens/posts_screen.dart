@@ -228,7 +228,8 @@ class _PostsScreenState extends State<PostsScreen> {
                                                       child: Row(
                                                         children: [
                                                           CircleAvatar(
-                                                            backgroundColor: cGreen2,
+                                                            backgroundColor:
+                                                                cGreen2,
                                                             radius: 22.r,
                                                             backgroundImage:
                                                                 NetworkImage(
@@ -256,7 +257,7 @@ class _PostsScreenState extends State<PostsScreen> {
                                                         ],
                                                       ),
                                                     ),
-                                                    Spacer(),
+                                                    // Spacer(),
                                                     Text(
                                                         intl.DateFormat.MMMEd()
                                                             .format(

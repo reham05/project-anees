@@ -17,6 +17,7 @@ class Txtformfield extends StatelessWidget {
     this.controller,
     this.readOnly = false,
     this.onChanged,
+    this.onTap,
   });
 
   final String? text;
@@ -29,9 +30,11 @@ class Txtformfield extends StatelessWidget {
   final TextEditingController? controller;
   final bool readOnly;
   final void Function(String)? onChanged;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: onTap,
       controller: controller,
       onChanged: onChanged,
       readOnly: readOnly,
