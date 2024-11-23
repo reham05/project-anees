@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,7 +31,6 @@ class _AccountScreenState extends State<AccountScreen> {
   String msg = '';
   final TextEditingController _fullName = TextEditingController();
   final TextEditingController _email = TextEditingController();
-  String? _userType;
   String? _userImage;
   String? _selectedCity;
   String? _selectedRegion;
@@ -61,7 +59,6 @@ class _AccountScreenState extends State<AccountScreen> {
       setState(() {
         _fullName.text = userData!['fullName'];
         _email.text = userData['email'];
-        _userType = userData['userType'];
         _userImage = userData['profile_picture_url'];
         _selectedCity = userData['city'];
         _selectedRegion = userData['region'];
@@ -82,7 +79,7 @@ class _AccountScreenState extends State<AccountScreen> {
       final croppedImage = await ImageCropper().cropImage(
         sourcePath: pickedImage.path,
         aspectRatio:
-            const CropAspectRatio(ratioX: 1, ratioY: 1), // Customize as needed
+            const CropAspectRatio(ratioX: 1, ratioY: 1), 
 
         uiSettings: [
           AndroidUiSettings(
@@ -113,8 +110,7 @@ class _AccountScreenState extends State<AccountScreen> {
       final croppedImage = await ImageCropper().cropImage(
         sourcePath: pickedImage.path,
         aspectRatio: const CropAspectRatio(
-            ratioX: 1, ratioY: 1), // Aspect ratio 1:1; customize as needed
-        // Change to .circle if you want a circular crop
+            ratioX: 1, ratioY: 1), 
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Crop Image',
@@ -186,6 +182,77 @@ class _AccountScreenState extends State<AccountScreen> {
         .update({
       'profile_picture_url': downloadURL,
     });
+    String? currentUid = FirebaseAuth.instance.currentUser?.uid;
+
+    //**** change user image in posts collection ****/
+    CollectionReference posts = FirebaseFirestore.instance.collection('posts');
+    QuerySnapshot snapshot =
+        await posts.where('uid', isEqualTo: currentUid).get();
+
+    // Update each post
+    for (var doc in snapshot.docs) {
+      await doc.reference.update({
+        'userImage': downloadURL,
+      });
+    }
+    /************************************** */
+    //****************change user image in comments collection ********************/
+    CollectionReference postss = FirebaseFirestore.instance.collection('posts');
+
+    // Get all posts
+    QuerySnapshot postssSnapshot = await postss.get();
+
+    for (var postDoc in postssSnapshot.docs) {
+      // Reference to the comments collection inside the current post
+      CollectionReference comments = postDoc.reference.collection('comments');
+
+      // Get all comments in the current post
+      QuerySnapshot commentsSnapshot = await comments.get();
+
+      for (var commentDoc in commentsSnapshot.docs) {
+        // Update the comment if the uid matches the current user
+        if (commentDoc['uid'] == currentUid) {
+          await commentDoc.reference.update({
+            'userImage': downloadURL,
+          });
+        }
+      }
+    }
+    /*************************************************************** */
+
+    //****************change user name in feedbacks collection ********************/
+    CollectionReference books = FirebaseFirestore.instance.collection('books');
+
+    QuerySnapshot booksSnapshot = await books.get();
+
+    for (var bookDoc in booksSnapshot.docs) {
+      // Reference to the feedbacks collection inside the current post
+      CollectionReference feedbacks = bookDoc.reference.collection('feedbacks');
+
+      // Get all feedbacks in the current post
+      QuerySnapshot feedbacksSnapshot = await feedbacks.get();
+
+      for (var feedbacksDoc in feedbacksSnapshot.docs) {
+        // Update the feedbacks if the uid matches the current user
+        if (feedbacksDoc['uid'] == currentUid) {
+          await feedbacksDoc.reference.update({
+            'userImage': downloadURL,
+          });
+        }
+      }
+    }
+    /************************************************ */
+    //**** change user image in chats collection ****/
+    CollectionReference chats = FirebaseFirestore.instance.collection('chats');
+    QuerySnapshot chatssnapshot =
+        await chats.where('reciverId', isEqualTo: currentUid).get();
+    // Update each book
+    for (var doc in chatssnapshot.docs) {
+      await doc.reference.update({
+        'reciverImage': downloadURL,
+      });
+    }
+    /*************************************************** */
   }
 
   void _showBottomSheet(BuildContext context) {
@@ -220,7 +287,6 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future<void> _updateUserData({
     required String fullName,
-    required userType,
     required String city,
     required String region,
   }) async {
@@ -233,13 +299,98 @@ class _AccountScreenState extends State<AccountScreen> {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({
         'fullName': fullName,
-        'userType': userType,
         'city': city,
         'region': region,
       });
+      String? currentUid = FirebaseAuth.instance.currentUser?.uid;
+      //**** change user name in posts collection ****/
+      CollectionReference posts =
+          FirebaseFirestore.instance.collection('posts');
+      QuerySnapshot snapshot =
+          await posts.where('uid', isEqualTo: currentUid).get();
+
+      // Update each post
+      for (var doc in snapshot.docs) {
+        await doc.reference.update({
+          'fullName': fullName,
+        });
+      }
+      //************************************************************* */
+      //****************change user name in comments collection ********************/
+      CollectionReference postss =
+          FirebaseFirestore.instance.collection('posts');
+
+      // Get all posts
+      QuerySnapshot postssSnapshot = await postss.get();
+
+      for (var postDoc in postssSnapshot.docs) {
+        // Reference to the comments collection inside the current post
+        CollectionReference comments = postDoc.reference.collection('comments');
+
+        // Get all comments in the current post
+        QuerySnapshot commentsSnapshot = await comments.get();
+
+        for (var commentDoc in commentsSnapshot.docs) {
+          // Update the comment if the uid matches the current user
+          if (commentDoc['uid'] == currentUid) {
+            await commentDoc.reference.update({
+              'fullName': fullName,
+            });
+          }
+        }
+      }
+      /*************************************************************** */
+      //****************change user name in feedbacks collection ********************/
+      CollectionReference books =
+          FirebaseFirestore.instance.collection('books');
+
+      QuerySnapshot booksSnapshot = await books.get();
+
+      for (var bookDoc in booksSnapshot.docs) {
+        // Reference to the feedbacks collection inside the current post
+        CollectionReference feedbacks =
+            bookDoc.reference.collection('feedbacks');
+
+        // Get all feedbacks in the current post
+        QuerySnapshot feedbacksSnapshot = await feedbacks.get();
+
+        for (var feedbacksDoc in feedbacksSnapshot.docs) {
+          // Update the feedbacks if the uid matches the current user
+          if (feedbacksDoc['uid'] == currentUid) {
+            await feedbacksDoc.reference.update({
+              'fullName': fullName,
+            });
+          }
+        }
+      }
+      /************************************************ */
+      //**** change user name in books collection ****/
+      CollectionReference book = FirebaseFirestore.instance.collection('books');
+      QuerySnapshot booksssnapshot =
+          await book.where('authorid', isEqualTo: currentUid).get();
+
+      // Update each book
+      for (var doc in booksssnapshot.docs) {
+        await doc.reference.update({
+          'authorName': fullName,
+        });
+      }
+      //**************************************************/
+
+      //**** change user name in chats collection ****/
+      CollectionReference chats =
+          FirebaseFirestore.instance.collection('chats');
+      QuerySnapshot chatssnapshot =
+          await chats.where('reciverId', isEqualTo: currentUid).get();
+      // Update each book
+      for (var doc in chatssnapshot.docs) {
+        await doc.reference.update({
+          'reciverName': fullName,
+        });
+      }
+      /*************************************************** */
       setState(() {
         _fullName.text = fullName;
-        _userType = userType;
         btnIsLoading = false;
       });
       // ignore: use_build_context_synchronously
@@ -375,69 +526,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "  You are..",
-                                    style: GoogleFonts.inter(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13.sp),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Row(
-                                          children: [
-                                            Radio<String>(
-                                              activeColor: cGreen3,
-                                              value: 'Author',
-                                              groupValue: _userType,
-                                              onChanged: (String? value) {
-                                                setState(() {
-                                                  _userType = value;
-                                                });
-                                              },
-                                            ),
-                                            Text(
-                                              'Author',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 13.sp,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Row(
-                                          children: [
-                                            Radio<String>(
-                                              value: 'Reader',
-                                              activeColor: cGreen3,
-                                              groupValue: _userType,
-                                              onChanged: (String? value) {
-                                                setState(() {
-                                                  _userType = value;
-                                                });
-                                              },
-                                            ),
-                                            Text(
-                                              'Reader',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 13.sp,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
+                                 
                                   Text(
                                     "  Name",
                                     style: GoogleFonts.inter(
@@ -635,7 +724,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                         if (_formKey.currentState!.validate()) {
                                           _updateUserData(
                                               fullName: _fullName.text,
-                                              userType: _userType,
+                                          
                                               city: _selectedCity!,
                                               region: _selectedRegion!);
                                         }

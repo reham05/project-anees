@@ -110,7 +110,7 @@ class _ChatScreenState extends State<ChatScreen> {
               height: 15.h,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Txtformfield(
                 text: "Search for chat...",
                 suffixIcon: Icons.search_rounded,

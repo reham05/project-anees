@@ -1,106 +1,11 @@
 // // ignore_for_file: duplicate_import, unused_import
 
-// import 'dart:developer';
-// import 'dart:io';
-
-// import 'package:anees/screens/pdf_view_screen.dart';
-// import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:file_picker/file_picker.dart';
-
-// // ignore: use_key_in_widget_constructors
-// class PDFListScreen extends StatelessWidget {
-//   Future<void> uploadPDF() async {
-//     // Pick a PDF file
-//     FilePickerResult? result = await FilePicker.platform.pickFiles(
-//       type: FileType.custom,
-//       allowedExtensions: ['pdf'],
-//     );
-
-//     if (result != null) {
-//       // Access the local file path
-//       final filePath = result.files.single.path;
-
-//       if (filePath != null) {
-//         // Create a File instance
-//         File file = File(filePath);
-
-//         // Upload the file to Firebase Storage
-//         final ref = FirebaseStorage.instance
-//             .ref()
-//             .child('pdfs/${result.files.single.name}');
-//         await ref.putFile(file);
-
-//         // Get the file URL
-//         final url = await ref.getDownloadURL();
-
-//         // Save the file link to Firestore
-//         await FirebaseFirestore.instance.collection('pdfs').add({
-//           'name': result.files.single.name,
-//           'url': url,
-//         });
-//       } else {
-//         // ignore: avoid_print
-//         print("File path is null.");
-//       }
-//     } else {
-//       // ignore: avoid_print
-//       print("No file selected.");
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("PDF Files"),
-//         actions: [
-//           IconButton(
-//             icon: const Icon(Icons.upload_file),
-//             onPressed: () async {
-//               await uploadPDF();
-//             },
-//           ),
-//         ],
-//       ),
-//       body: StreamBuilder(
-//         stream: FirebaseFirestore.instance.collection('pdfs').snapshots(),
-//         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//           if (!snapshot.hasData) {
-//             // ignore: prefer_const_constructors
-//             return Center(child: CircularProgressIndicator());
-//           }
-//           final pdfs = snapshot.data!.docs;
-//           return ListView.builder(
-//             itemCount: pdfs.length,
-//             itemBuilder: (context, index) {
-//               final pdf = pdfs[index];
-//               return ListTile(
-//                 title: Text(pdf['name']),
-//                 onTap: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                       builder: (context) => const BookViewerScreen(),
-//                     ),
-//                   );
-//                 },
-//               );
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:anees/screens/widgets/txtformfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -126,7 +31,6 @@ class _AddBookState extends State<AddBook> {
   bool btnIsLoading = false;
   File? pickedImage;
   String? _selectedCategory;
-  // File? _selectedFile;
 
   TextEditingController bookTitle = TextEditingController();
   TextEditingController numberOfPages = TextEditingController();
@@ -143,27 +47,6 @@ class _AddBookState extends State<AddBook> {
       isLoadingPage = false;
     });
   }
-
-  // Future<void> pickPDFFile() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['pdf'],
-  //   );
-
-  //   if (result != null) {
-  //     final filePath = result.files.single.path;
-
-  //     if (filePath != null) {
-  //       setState(() {
-  //         _selectedFile = File(filePath);
-  //       });
-  //     } else {
-  //       log("File path is null.");
-  //     }
-  //   } else {
-  //     log("No file selected.");
-  //   }
-  // }
 
   Future<void> uploadPDFToFirebase({
     required String bookTitle,
@@ -188,12 +71,6 @@ class _AddBookState extends State<AddBook> {
         await rref.putFile(pickedImage!);
         imageUrl = await rref.getDownloadURL();
       }
-      // final ref = FirebaseStorage.instance
-      //     .ref()
-      //     .child('books/$uuid/${_selectedFile!.uri.pathSegments.last}');
-      // await ref.putFile(_selectedFile!);
-
-      // final url = await ref.getDownloadURL();
 
       await FirebaseFirestore.instance.collection('books').doc(uuid).set({
         'bookid': uuid,
@@ -201,7 +78,6 @@ class _AddBookState extends State<AddBook> {
         'description': bookDescription,
         'numOfPages': numberOfPages,
         'written': written,
-        // 'urlBook': url,
         'urlBookCover': imageUrl,
         'authorid': FirebaseAuth.instance.currentUser!.uid,
         'authorName': authorName,
@@ -555,27 +431,6 @@ class _AddBookState extends State<AddBook> {
                           ),
                         ),
                       ),
-                      // SizedBox(
-                      //   height: 4.h,
-                      // ),
-                      // Row(
-                      //   children: [
-                      //     ElevatedButton(
-                      //       style: ButtonStyle(
-                      //           backgroundColor: WidgetStatePropertyAll(
-                      //               Colors.grey.shade200)),
-                      //       onPressed: pickPDFFile,
-                      //       child: const Text("Choose PDF File"),
-                      //     ),
-                      //     SizedBox(width: 5.w),
-                      //     _selectedFile != null
-                      //         ? Expanded(
-                      //             child: Text(
-                      //                 "Selected File: ${_selectedFile!.uri.pathSegments.last}"),
-                      //           )
-                      //         : const Text("No file selected"),
-                      //   ],
-                      // ),
                       SizedBox(
                         height: 4.h,
                       ),
@@ -607,13 +462,14 @@ class _AddBookState extends State<AddBook> {
                                         )));
                               } else {
                                 uploadPDFToFirebase(
-                                    bookTitle: bookTitle.text,
-                                    authorName: myName!,
-                                    bookDescription: description.text,
-                                    category: _selectedCategory!,
-                                    numberOfPages: numberOfPages.text,
-                                    bookstoreAddress:bookStore.text,
-                                    written: bookWritten.text);
+                                  bookTitle: bookTitle.text.trim(),
+                                  authorName: myName!.trim(),
+                                  bookDescription: description.text.trim(),
+                                  category: _selectedCategory!.trim(),
+                                  numberOfPages: numberOfPages.text.trim(),
+                                  bookstoreAddress: bookStore.text.trim(),
+                                  written: bookWritten.text.trim(),
+                                );
                               }
                             }
                           },

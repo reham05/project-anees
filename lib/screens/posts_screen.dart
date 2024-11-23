@@ -86,15 +86,14 @@ class _PostsScreenState extends State<PostsScreen> {
   Future<void> sharePostLink(String postId) async {
     try {
       final DynamicLinkParameters parameters = DynamicLinkParameters(
-        uriPrefix:
-            'https://aneesapp.page.link', // Replace with your dynamic link prefix
+        uriPrefix: 'https://aneesapp.page.link',
         link: Uri.parse('https://aneesapp.com/post/$postId'),
         androidParameters: AndroidParameters(
-          packageName: 'com.example.anees', // Your app package name
+          packageName: 'com.example.anees',
           minimumVersion: 1,
         ),
         iosParameters: IOSParameters(
-          bundleId: 'com.example.anees', // Your iOS app bundle ID
+          bundleId: 'com.example.anees',
           minimumVersion: '1.0.1',
         ),
       );
@@ -345,8 +344,6 @@ class _PostsScreenState extends State<PostsScreen> {
                                                     children: [
                                                       IconButton(
                                                           onPressed: () {
-                                                            // FirestoreMethod().deletePosts(
-                                                            //     postMap: postMap);
                                                             Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(

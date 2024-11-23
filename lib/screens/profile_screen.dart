@@ -1,13 +1,19 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:developer';
+
 import 'package:anees/screens/about_book_screen.dart';
 import 'package:anees/screens/room_chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:share_plus/share_plus.dart';
 
 import '../Firebase/firestore.dart';
 import '../utils/colors.dart';
@@ -119,6 +125,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
         pageLoading = false;
       });
     }
+  }
+
+// Function to create a dynamic link and share it
+  Future<void> sharePostLink(String postId) async {
+    try {
+      final DynamicLinkParameters parameters = DynamicLinkParameters(
+        uriPrefix: 'https://aneesapp.page.link',
+        link: Uri.parse('https://aneesapp.com/post/$postId'),
+        androidParameters: const AndroidParameters(
+          packageName: 'com.example.anees',
+          minimumVersion: 1,
+        ),
+        iosParameters: const IOSParameters(
+          bundleId: 'com.example.anees',
+          minimumVersion: '1.0.1',
+        ),
+      );
+
+      final Uri shortUrl =
+          await FirebaseDynamicLinks.instance.buildLink(parameters);
+      updateShareCount(postId);
+      Share.share(shortUrl.toString());
+    } catch (e) {
+      log('Error creating dynamic link: $e');
+    }
+  }
+
+  void updateShareCount(String postId) {
+    // Update your Firestore logic here to increment share count
+    FirebaseFirestore.instance.collection('posts').doc(postId).update({
+      'share_count': FieldValue.increment(1),
+    });
   }
 
   @override
@@ -340,7 +378,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                             userType == "Author"? booksCount.toString():shelfBooksCount.toString(),
+                              userType == "Author"
+                                  ? booksCount.toString()
+                                  : shelfBooksCount.toString(),
                               style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w600, fontSize: 14.sp),
                             ),
@@ -566,8 +606,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     if (!snapshot.hasData ||
                                         snapshot.data!.docs.isEmpty) {
                                       return const Center(
-                                          child: Text(
-                                              "No books found"));
+                                          child: Text("No books found"));
                                     }
 
                                     List<String> bookIds = snapshot.data!.docs
@@ -873,9 +912,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                                           3.14),
                                                                   child: IconButton(
                                                                       onPressed: () {
-                                                                        // sharePostLink(
-                                                                        //     postMap[
-                                                                        //         'postid']);
+                                                                        sharePostLink(
+                                                                            postMap['postid']);
                                                                       },
                                                                       icon: Icon(
                                                                         Icons
@@ -895,8 +933,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                               IconButton(
                                                                   onPressed:
                                                                       () {
-                                                                    // FirestoreMethod().deletePosts(
-                                                                    //     postMap: postMap);
                                                                     Navigator.push(
                                                                         context,
                                                                         MaterialPageRoute(

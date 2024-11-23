@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -15,7 +17,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'about_book_screen.dart';
-import 'book_details_screen.dart';
+
 import 'profile_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Map<String, dynamic> recommendBooks;
   late Future<List<String>> recommendedBookIds;
   late Future<List<Map<String, dynamic>>> booksData;
-
+  late String? userType;
   @override
   void initState() {
     super.initState();
@@ -70,12 +72,21 @@ class _HomeScreenState extends State<HomeScreen> {
       List<String> interests =
           List<String>.from(convertedInterestsData['interests'] ?? []);
       List<String> recommendedBookIds = await sendInterestsToModel(interests);
+
+      final snapShott = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+      final userD = snapShott.data();
+      setState(() {
+        userType = snapShott['userType'];
+      });
       setState(() {
         pageLoading = false;
       });
       return recommendedBookIds;
     } else {
-      print('No data available');
+      log('No data available');
       return [];
     }
   }
@@ -217,34 +228,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15.0,
-                                      right: 15.0,
-                                      top: 10,
-                                      bottom: 60),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ChatBotScreen(),
-                                          ));
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 19.r,
-                                      backgroundImage: const AssetImage(
-                                        'assets/images/chatbot.png',
+                            userType == 'Reader'
+                                ? SizedBox(
+                                    height: 90.h,
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 15.0,
+                                            right: 15.0,
+                                            top: 10,
+                                            bottom: 60),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const ChatBotScreen(),
+                                                ));
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 19.r,
+                                            backgroundImage: const AssetImage(
+                                              'assets/images/chatbot.png',
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
+                                    ],
+                                  )
                           ],
                         ),
                       )
@@ -262,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      MultiCollectionSearchPage(),
+                                      const MultiCollectionSearchPage(),
                                 ));
                           },
                           text: "Search for books, Author, Reader..",
@@ -321,7 +336,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 itemCount: filters.length),
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Row(
@@ -377,7 +391,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   } else if (snapshot.hasError) {
                                     return const Center(child: Text('Error'));
                                   }
-                                  booksData = fetchBooksData(snapshot.data!);
+                                  if (snapshot.data!.isEmpty) {
+                                    return Center(
+                                      child: Text(
+                                        "No Books are added.",
+                                        style: GoogleFonts.inter(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+                                  }
 
                                   return FutureBuilder<
                                       List<Map<String, dynamic>>>(
@@ -624,133 +648,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         )
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       Text(
-                        //         "Posts",
-                        //         style: GoogleFonts.roboto(
-                        //             fontSize: 13.sp,
-                        //             fontWeight: FontWeight.w700,
-                        //             color: cGreen),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.all(8.0),
-                        //   child: SizedBox(
-                        //     height: 150.h,
-                        //     child: ListView.separated(
-                        //         scrollDirection: Axis.horizontal,
-                        //         itemBuilder: (context, index) => Container(
-                        //               // height: 100.h,
-                        //               width: 320.w,
-                        //               decoration: BoxDecoration(
-                        //                   color: cGreen4,
-                        //                   borderRadius: BorderRadius.circular(20)),
-                        //               child: Padding(
-                        //                 padding: const EdgeInsets.all(8.0),
-                        //                 child: Column(
-                        //                   mainAxisAlignment: MainAxisAlignment.start,
-                        //                   children: [
-                        //                     Row(
-                        //                       children: [
-                        //                         CircleAvatar(
-                        //                           radius: 22.r,
-                        //                           backgroundImage: const AssetImage(
-                        //                             "assets/images/person.png",
-                        //                           ),
-                        //                         ),
-                        //                         SizedBox(
-                        //                           width: 5.w,
-                        //                         ),
-                        //                         Expanded(
-                        //                           child: Row(
-                        //                             mainAxisAlignment:
-                        //                                 MainAxisAlignment
-                        //                                     .spaceBetween,
-                        //                             children: [
-                        //                               Expanded(
-                        //                                 child: Text("Sultan Almousa",
-                        //                                     maxLines: 2,
-                        //                                     overflow:
-                        //                                         TextOverflow.ellipsis,
-                        //                                     style: GoogleFonts.inter(
-                        //                                         fontSize: 14.sp,
-                        //                                         fontWeight:
-                        //                                             FontWeight.bold)),
-                        //                               ),
-                        //                               Text("Jan 1, 2024",
-                        //                                   style: GoogleFonts.inter(
-                        //                                       fontSize: 12.sp,
-                        //                                       fontWeight:
-                        //                                           FontWeight.bold)),
-                        //                             ],
-                        //                           ),
-                        //                         ),
-                        //                       ],
-                        //                     ),
-                        //                     const Text(
-                        //                         maxLines: 2,
-                        //                         overflow: TextOverflow.ellipsis,
-                        //                         textDirection: TextDirection.rtl,
-                        //                         "هدية بسيطة لكم أتمنى تعجبكم، وهي عبارة عن قصة تاريخية قصيرة كتبتها هذه الأيام بعنوان كبيرة الورد."),
-                        //                     Row(
-                        //                       mainAxisAlignment:
-                        //                           MainAxisAlignment.spaceBetween,
-                        //                       children: [
-                        //                         Row(
-                        //                           children: [
-                        //                             Transform(
-                        //                                 alignment: Alignment.center,
-                        //                                 transform:
-                        //                                     Matrix4.rotationY(3.14),
-                        //                                 child: IconButton(
-                        //                                     onPressed: () {},
-                        //                                     icon: Icon(
-                        //                                       Icons.reply,
-                        //                                       size: 23.sp,
-                        //                                     ))),
-                        //                             const Text("10"),
-                        //                           ],
-                        //                         ),
-                        //                         Row(
-                        //                           children: [
-                        //                             IconButton(
-                        //                                 onPressed: () {},
-                        //                                 icon: Icon(
-                        //                                   Icons.comment_rounded,
-                        //                                   size: 23.sp,
-                        //                                 )),
-                        //                             const Text("10"),
-                        //                           ],
-                        //                         ),
-                        //                         Row(
-                        //                           children: [
-                        //                             IconButton(
-                        //                                 onPressed: () {},
-                        //                                 icon: Icon(
-                        //                                   Icons.favorite_border,
-                        //                                   size: 23.sp,
-                        //                                 )),
-                        //                             const Text("1k"),
-                        //                           ],
-                        //                         )
-                        //                       ],
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //         separatorBuilder: (context, index) => SizedBox(
-                        //               width: 10.w,
-                        //             ),
-                        //         itemCount: 5),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

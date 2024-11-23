@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hugeicons/hugeicons.dart';
+
 import 'package:intl/intl.dart';
 
 class BookDetailsScreen extends StatefulWidget {
@@ -43,13 +43,6 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                             Icons.arrow_back_ios,
                             color: cGreen,
                           )),
-                      // IconButton(
-                      //   onPressed: () {},
-                      //   icon: const HugeIcon(
-                      //     icon: HugeIcons.strokeRoundedBook01,
-                      //     color: cGreen,
-                      //   ),
-                      // )
                     ],
                   ),
                 ),
@@ -91,53 +84,9 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         color: Colors.grey.shade500),
                   ),
                 ),
-                // SizedBox(
-                //   height: 60.h,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     const NewWidget(
-                //       text: "Fiction",
-                //     ),
-                //     SizedBox(
-                //       width: 5.w,
-                //     ),
-                //     const NewWidget(
-                //       text: "Classics",
-                //     ),
-                //     SizedBox(
-                //       width: 5.w,
-                //     ),
-                //     const NewWidget(
-                //       text: "Novel",
-                //     )
-                //   ],
-                // ),
-                // SizedBox(
-                //   height: 10.h,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     const NewWidget(
-                //       text: "English",
-                //     ),
-                //     SizedBox(
-                //       width: 5.w,
-                //     ),
-                //     const NewWidget(
-                //       text: "Arabic",
-                //     ),
-                //   ],
-                // ),
                 SizedBox(
                   height: 35.h,
                 ),
-                // const Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-                //   child: Divider(),
-                // ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8.0, vertical: 0.0),

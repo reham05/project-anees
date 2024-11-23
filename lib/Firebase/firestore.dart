@@ -25,7 +25,7 @@ class FirestoreMethod {
         'likes': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
       });
       if (FirebaseAuth.instance.currentUser!.uid != postMap['uid']) {
-        final notificationId = Uuid().v4();
+        final notificationId = const Uuid().v4();
         await FirebaseFirestore.instance
             .collection("activitesNotifications")
             .doc(postMap['uid'])
@@ -54,6 +54,15 @@ class FirestoreMethod {
     }
   }
 
+  deleteBooks({required QueryDocumentSnapshot<Object?> bookMap}) async {
+    if (FirebaseAuth.instance.currentUser!.uid == bookMap['authorid']) {
+      FirebaseFirestore.instance
+          .collection('books')
+          .doc(bookMap['bookid'])
+          .delete();
+    }
+  }
+
   addComment({
     required comment,
     required userimage,
@@ -77,7 +86,7 @@ class FirestoreMethod {
           'date': Timestamp.now()
         });
       if (FirebaseAuth.instance.currentUser!.uid != postUserId) {
-        final notificationId = Uuid().v4();
+        final notificationId = const Uuid().v4();
         await FirebaseFirestore.instance
             .collection("activitesNotifications")
             .doc(postUserId)
@@ -120,7 +129,7 @@ class FirestoreMethod {
           FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
     });
 
-    final notificationId = Uuid().v4();
+    final notificationId = const Uuid().v4();
     await FirebaseFirestore.instance
         .collection("activitesNotifications")
         .doc(userId)
@@ -173,7 +182,7 @@ class FirestoreMethod {
           'date': Timestamp.now(),
         });
       if (FirebaseAuth.instance.currentUser!.uid != bookAuthorId) {
-        final notificationId = Uuid().v4();
+        final notificationId = const Uuid().v4();
         await FirebaseFirestore.instance
             .collection("activitesNotifications")
             .doc(bookAuthorId)

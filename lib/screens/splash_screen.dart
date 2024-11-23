@@ -1,4 +1,6 @@
 import 'package:anees/screens/create_account_screen.dart';
+import 'package:anees/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -63,7 +65,19 @@ class SplashScreen extends StatelessWidget {
 
   Future<void> handlrData(context) async {
     await Future.delayed(const Duration(seconds: 5));
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const CreateAccountScreen()));
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (context) => const CreateAccountScreen()),
+      );
+    }
   }
 }

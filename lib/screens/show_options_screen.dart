@@ -5,12 +5,14 @@ import 'package:anees/screens/delete_posts_screen.dart';
 import 'package:anees/utils/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import 'add_book.dart';
+import 'delete_books_screen.dart';
 
 class ShowOptions extends StatefulWidget {
   const ShowOptions({super.key});
@@ -107,7 +109,7 @@ class _ShowOptionsState extends State<ShowOptions> {
                     typeUserAccount == "Author"
                         ? ListTile(
                             leading: const Icon(
-                              Icons.book,
+                              Icons.book_outlined,
                               color: cGreen,
                             ),
                             title: Text(
@@ -127,8 +129,8 @@ class _ShowOptionsState extends State<ShowOptions> {
                           )
                         : const SizedBox.shrink(),
                     ListTile(
-                      leading: const Icon(
-                        Icons.book,
+                      leading: const HugeIcon(
+                        icon: HugeIcons.strokeRoundedListView,
                         color: cGreen,
                       ),
                       title: Text(
@@ -146,6 +148,29 @@ class _ShowOptionsState extends State<ShowOptions> {
                             ));
                       },
                     ),
+                    typeUserAccount == "Author"
+                        ? ListTile(
+                            leading: const HugeIcon(
+                              icon: HugeIcons.strokeRoundedBook01,
+                              color: cGreen,
+                            ),
+                            title: Text(
+                              "View my Books / Delete Books",
+                              style: GoogleFonts.inter(
+                                  fontSize: 15.sp,
+                                  color: cGreen,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DeleteBooksScreen(),
+                                  ));
+                            },
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
     );

@@ -1,6 +1,8 @@
+// ignore_for_file: unnecessary_cast
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -197,7 +199,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                           'chatroomid': chatRoomId(),
                           'date': Timestamp.now(),
                         });
-                        final uuid = Uuid().v4();
+                        final uuid = const Uuid().v4();
                         await FirebaseFirestore.instance
                             .collection('chats')
                             .doc(chatRoomId())

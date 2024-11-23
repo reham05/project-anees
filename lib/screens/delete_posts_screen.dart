@@ -24,32 +24,6 @@ class DeletePostsScreen extends StatefulWidget {
 }
 
 class _DeletePostsScreenState extends State<DeletePostsScreen> {
-  // Map<String, dynamic> userData = {};
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getUserData();
-  // }
-
-  // Future<void> getUserData() async {
-  //   try {
-  //     final data = await FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(FirebaseAuth.instance.currentUser!.uid)
-  //         .get();
-
-  //     if (data.exists) {
-  //       setState(() {
-  //         userData = data.data() as Map<String, dynamic>;
-  //       });
-  //     } else {
-  //       log("User data not found");
-  //     }
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-  // }
   _getCommentsLength(String postId) async {
     try {
       final snapshot = await FirebaseFirestore.instance
@@ -72,15 +46,14 @@ class _DeletePostsScreenState extends State<DeletePostsScreen> {
   Future<void> sharePostLink(String postId) async {
     try {
       final DynamicLinkParameters parameters = DynamicLinkParameters(
-        uriPrefix:
-            'https://aneesapp.page.link', // Replace with your dynamic link prefix
+        uriPrefix: 'https://aneesapp.page.link',
         link: Uri.parse('https://aneesapp.com/post/$postId'),
         androidParameters: AndroidParameters(
-          packageName: 'com.example.anees', // Your app package name
+          packageName: 'com.example.anees',
           minimumVersion: 1,
         ),
         iosParameters: IOSParameters(
-          bundleId: 'com.example.anees', // Your iOS app bundle ID
+          bundleId: 'com.example.anees',
           minimumVersion: '1.0.1',
         ),
       );
@@ -314,8 +287,6 @@ class _DeletePostsScreenState extends State<DeletePostsScreen> {
                                               children: [
                                                 IconButton(
                                                     onPressed: () {
-                                                      // FirestoreMethod().deletePosts(
-                                                      //     postMap: postMap);
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(

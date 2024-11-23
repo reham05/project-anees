@@ -9,11 +9,12 @@ import 'package:anees/screens/account_screen.dart';
 import 'package:anees/screens/add_book.dart';
 import 'package:anees/screens/change_password_screen.dart';
 import 'package:anees/screens/chat_screen.dart';
+import 'package:anees/screens/delete_books_screen.dart';
 import 'package:anees/screens/delete_posts_screen.dart';
 import 'package:anees/screens/forgot_password_screen.dart';
 import 'package:anees/screens/home.dart';
 import 'package:anees/screens/home_screen.dart';
-import 'package:anees/screens/pdf_view_screen.dart';
+
 import 'package:anees/screens/pick_screen.dart';
 import 'package:anees/screens/posts_screen.dart';
 import 'package:anees/screens/room_chat_screen.dart';
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 useMaterial3: true,
               ),
-              home: const Home());
+              home: const SplashScreen());
         });
   }
 }

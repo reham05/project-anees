@@ -54,7 +54,6 @@ class _SignupScreenState extends State<SignupScreen> {
     "Medina": ["Al Uyun", "Al Khalidiyah", "Al Qiblatayn"],
   };
 
-  // Function to handle sign-up
   Future<void> _signUp({
     required String fullName,
     required String email,
@@ -73,18 +72,16 @@ class _SignupScreenState extends State<SignupScreen> {
         password: password,
       );
 
-      // Get the user UID
       String uid = userCredential.user!.uid;
 
-      // Store user data in Firestore
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
         'uid': uid,
         'fullName': fullName,
         'email': email,
         'createdAt': Timestamp.now(),
-        // 'password': password,
         'userType': userType,
-        'profile_picture_url': "not-image",
+        'profile_picture_url':
+            "https://firebasestorage.googleapis.com/v0/b/anees-a8319.appspot.com/o/iconPerson.png?alt=media&token=ed7f9966-6e55-42a9-9719-68f1fcb85451",
         "completedPickInterest": false,
         'city': city,
         'region': region,

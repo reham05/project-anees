@@ -47,7 +47,7 @@ class _ViewAllRecomandationBooskState extends State<ViewAllRecomandationBoosk> {
               return const Center(child: Text("No books available"));
             }
 
-            // هنا يتم التأكد من أن البيانات متاحة للاستخدام
+           
             final booksList = snapshot.data!;
 
             return GridView.builder(

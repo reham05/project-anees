@@ -5,11 +5,10 @@ import 'package:anees/screens/login_screen.dart';
 import 'package:anees/screens/privacy_policy.dart';
 import 'package:anees/screens/terms_conditions_screen.dart';
 import 'package:anees/utils/colors.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../data/models/auth_service.dart';
 import 'notification_screen.dart';

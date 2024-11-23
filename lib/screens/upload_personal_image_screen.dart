@@ -32,7 +32,7 @@ class _UploadPersonalImageScreenState extends State<UploadPersonalImageScreen> {
       final croppedImage = await ImageCropper().cropImage(
         sourcePath: pickedImage.path,
         aspectRatio:
-            const CropAspectRatio(ratioX: 1, ratioY: 1), // Customize as needed
+            const CropAspectRatio(ratioX: 1, ratioY: 1),
 
         uiSettings: [
           AndroidUiSettings(
@@ -62,8 +62,8 @@ class _UploadPersonalImageScreenState extends State<UploadPersonalImageScreen> {
       final croppedImage = await ImageCropper().cropImage(
         sourcePath: pickedImage.path,
         aspectRatio: const CropAspectRatio(
-            ratioX: 1, ratioY: 1), // Aspect ratio 1:1; customize as needed
-        // Change to .circle if you want a circular crop
+            ratioX: 1, ratioY: 1), 
+       
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Crop Image',

@@ -40,9 +40,9 @@ class AuthService {
             'fullName': user.displayName,
             'email': user.email,
             'createdAt': Timestamp.now(),
-            // 'password': "",
             'userType': "",
-            'profile_picture_url': "not-image",
+            'profile_picture_url':
+                "https://firebasestorage.googleapis.com/v0/b/anees-a8319.appspot.com/o/iconPerson.png?alt=media&token=ed7f9966-6e55-42a9-9719-68f1fcb85451",
             "completedPickInterest": false,
             'city': "",
             'region': "",
@@ -103,9 +103,9 @@ class AuthService {
                   'fullName': user.displayName,
                   'email': user.email,
                   'createdAt': Timestamp.now(),
-                  // 'password': "",
                   'userType': "",
-                  'profile_picture_url': "not-image",
+                  'profile_picture_url':
+                      "https://firebasestorage.googleapis.com/v0/b/anees-a8319.appspot.com/o/iconPerson.png?alt=media&token=ed7f9966-6e55-42a9-9719-68f1fcb85451",
                   'city': "",
                   'region': "",
                   "completedPickInterest": false,

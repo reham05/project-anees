@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, unnecessary_cast
 
 import 'dart:developer';
 
@@ -27,10 +27,12 @@ class _MultiCollectionSearchPageState extends State<MultiCollectionSearchPage> {
   bool isLoading = false;
   List<Map<String, dynamic>> recentSearches = [];
   int searchCount = 0;
-
+  int counterSearch = 0;
+  bool firstOpen = true;
   @override
   void initState() {
     super.initState();
+
     _loadRecentSearches();
   }
 
@@ -62,6 +64,8 @@ class _MultiCollectionSearchPageState extends State<MultiCollectionSearchPage> {
     setState(() {
       isLoading = true;
       searchResults.clear();
+      firstOpen = false;
+      counterSearch = 0;
     });
 
     try {
@@ -69,7 +73,7 @@ class _MultiCollectionSearchPageState extends State<MultiCollectionSearchPage> {
           .collection('books')
           .where('title', isEqualTo: query)
           .get();
-
+      counterSearch += booksSnapshot.docs.length;
       for (var doc in booksSnapshot.docs) {
         Map<String, dynamic> bookData = doc.data() as Map<String, dynamic>;
 
@@ -85,7 +89,7 @@ class _MultiCollectionSearchPageState extends State<MultiCollectionSearchPage> {
           .collection('users')
           .where('fullName', isEqualTo: query)
           .get();
-
+      counterSearch += usersSnapshot.docs.length;
       for (var doc in usersSnapshot.docs) {
         Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
 
@@ -281,201 +285,233 @@ class _MultiCollectionSearchPageState extends State<MultiCollectionSearchPage> {
                       child: CircularProgressIndicator(
                       color: cGreen,
                     ))
-                  : Expanded(
-                      child: searchResults.isNotEmpty
-                          ? ListView.builder(
-                              itemCount: searchResults.length,
-                              itemBuilder: (context, index) {
-                                var result = searchResults[index];
-                                if (result['type'] == 'book') {
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                AboutBookScreen(
-                                              book: searchResults[index],
-                                            ),
-                                          ));
-                                    },
-                                    child: Card(
-                                      color: cGreen4,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  height: 90.h,
-                                                  width: 60.w,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      image: DecorationImage(
-                                                        image: NetworkImage(
-                                                            searchResults[index]
-                                                                [
-                                                                'urlBookCover']),
-                                                        fit: BoxFit.fill,
-                                                      )),
+                  : counterSearch == 0 && !firstOpen
+                      ? const Expanded(
+                          child: Center(
+                              child:
+                                  Text("No authors, readers, or books found.")),
+                        )
+                      : Expanded(
+                          child: searchResults.isNotEmpty
+                              ? ListView.builder(
+                                  itemCount: searchResults.length,
+                                  itemBuilder: (context, index) {
+                                    var result = searchResults[index];
+                                    if (result['type'] == 'book') {
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AboutBookScreen(
+                                                  book: searchResults[index],
                                                 ),
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-                                                Column(
+                                              ));
+                                        },
+                                        child: Card(
+                                          color: cGreen4,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      "Title:",
-                                                      style: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontSize: 12.sp),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
+                                                    Container(
+                                                      height: 90.h,
+                                                      width: 60.w,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          image:
+                                                              DecorationImage(
+                                                            image: NetworkImage(
+                                                                searchResults[
+                                                                        index][
+                                                                    'urlBookCover']),
+                                                            fit: BoxFit.fill,
+                                                          )),
                                                     ),
-                                                    Text(
-                                                      searchResults[index]
-                                                          ['title'],
-                                                      style: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: Colors
-                                                              .grey.shade500,
-                                                          fontSize: 11.sp),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
+                                                    SizedBox(
+                                                      width: 8.w,
                                                     ),
-                                                    Text(
-                                                      "Author:",
-                                                      style: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontSize: 12.sp),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "Title:",
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontSize:
+                                                                      12.sp),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                        Text(
+                                                          searchResults[index]
+                                                              ['title'],
+                                                          style: GoogleFonts
+                                                              .inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade500,
+                                                                  fontSize:
+                                                                      11.sp),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                        Text(
+                                                          "Author:",
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontSize:
+                                                                      12.sp),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                        Text(
+                                                          searchResults[index]
+                                                              ['authorName'],
+                                                          style: GoogleFonts
+                                                              .inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade500,
+                                                                  fontSize:
+                                                                      10.sp),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                        Text(
+                                                          "Category:",
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontSize:
+                                                                      12.sp),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                        Text(
+                                                          " ${searchResults[index]['category']}",
+                                                          style: GoogleFonts
+                                                              .inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade500,
+                                                                  fontSize:
+                                                                      10.sp),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Text(
-                                                      searchResults[index]
-                                                          ['authorName'],
-                                                      style: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: Colors
-                                                              .grey.shade500,
-                                                          fontSize: 10.sp),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                    ),
-                                                    Text(
-                                                      "Category:",
-                                                      style: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontSize: 12.sp),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                    ),
-                                                    Text(
-                                                      " ${searchResults[index]['category']}",
-                                                      style: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: Colors
-                                                              .grey.shade500,
-                                                          fontSize: 10.sp),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                    ),
+                                                    const Spacer(),
+                                                    IconButton(
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  AboutBookScreen(
+                                                                book:
+                                                                    searchResults[
+                                                                        index],
+                                                              ),
+                                                            ));
+                                                      },
+                                                      icon: const Icon(Icons
+                                                          .arrow_forward_ios),
+                                                    )
                                                   ],
                                                 ),
-                                                const Spacer(),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              AboutBookScreen(
-                                                            book: searchResults[
-                                                                index],
-                                                          ),
-                                                        ));
-                                                  },
-                                                  icon: const Icon(
-                                                      Icons.arrow_forward_ios),
-                                                )
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                } else if (result['type'] == 'user') {
-                                  return Card(
-                                    color: cGreen4,
-                                    child: ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            result['profile_picture_url']),
-                                      ),
-                                      title: Text(
-                                        result['fullName'],
-                                        style: GoogleFonts.inter(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15.sp),
-                                      ),
-                                      subtitle: Text(
-                                        result['userType'],
-                                        style: GoogleFonts.inter(
-                                            color: Colors.grey.shade700),
-                                      ),
-                                      trailing: IconButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ProfileScreen(
-                                                          userId: result['uid'],
-                                                          fromHome: false),
-                                                ));
-                                          },
-                                          icon: Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Colors.black,
-                                            size: 18.sp,
-                                          )),
-                                    ),
-                                  );
-                                }
-                                return const SizedBox.shrink();
-                              },
-                            )
-                          : const SizedBox.shrink(),
-                    ),
+                                        ),
+                                      );
+                                    } else if (result['type'] == 'user') {
+                                      return Card(
+                                        color: cGreen4,
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                result['profile_picture_url']),
+                                          ),
+                                          title: Text(
+                                            result['fullName'],
+                                            style: GoogleFonts.inter(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 15.sp),
+                                          ),
+                                          subtitle: Text(
+                                            result['userType'],
+                                            style: GoogleFonts.inter(
+                                                color: Colors.grey.shade700),
+                                          ),
+                                          trailing: IconButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ProfileScreen(
+                                                              userId:
+                                                                  result['uid'],
+                                                              fromHome: false),
+                                                    ));
+                                              },
+                                              icon: Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: Colors.black,
+                                                size: 18.sp,
+                                              )),
+                                        ),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                )
+                              : const SizedBox.shrink()),
             ],
           ),
         ),
