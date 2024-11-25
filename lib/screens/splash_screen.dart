@@ -19,8 +19,9 @@ class SplashScreen extends StatelessWidget {
           backgroundColor: cGreen,
           body: Center(
               child: ImageAsset(
-            imagePath: "assets/images/Anees.png",
-            width: 150.w,
+            imagePath: "assets/images/logoanees.png",
+            width: 250.w,
+            boxFit: BoxFit.fill,
           )),
         ),
         Positioned(

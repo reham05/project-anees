@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'dart:convert';
 import 'dart:developer';
 
@@ -17,7 +15,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'about_book_screen.dart';
-
+import 'book_details_screen.dart';
 import 'profile_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,14 +24,14 @@ import 'view_all_recomandation_boosk.dart';
 import 'view_books_with_filter.dart';
 
 const filters = [
-  {'image': "assets/images/poetry.png", 'text': "Poetry"},
+  {'image': "assets/images/fiction.png", 'text': "Fiction"},
   {'image': "assets/images/business.png", 'text': "Business"},
-  {'image': "assets/images/fantacy.png", 'text': "Fantacy"},
-  {'image': "assets/images/detective.png", 'text': "Detective"},
-  {'image': "assets/images/english.png", 'text': "English"},
-  {'image': "assets/images/arabic.png", 'text': "Arabic"},
+  {'image': "assets/images/biography.png", 'text': "Biography"},
+  {'image': "assets/images/health.png", 'text': "Health"},
+  {'image': "assets/images/literay-criticism.png", 'text': "Literary Criticism"},
+  {'image': "assets/images/english.png", 'text': "Social Science"},
   {'image': "assets/images/history.png", 'text': "History"},
-  {'image': "assets/images/technology.png", 'text': "Technology"},
+  {'image': "assets/images/Science.png", 'text': "Science"},
 ];
 
 class HomeScreen extends StatefulWidget {
@@ -50,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Map<String, dynamic> recommendBooks;
   late Future<List<String>> recommendedBookIds;
   late Future<List<Map<String, dynamic>>> booksData;
-  late String? userType;
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List<String>> getUserInterests(String uid) async {
+    // ignore: no_leading_underscores_for_local_identifiers
     final DatabaseReference _databaseReference =
         FirebaseDatabase.instance.ref();
     final snapshot =
@@ -72,15 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
       List<String> interests =
           List<String>.from(convertedInterestsData['interests'] ?? []);
       List<String> recommendedBookIds = await sendInterestsToModel(interests);
-
-      final snapShott = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
-      final userD = snapShott.data();
-      setState(() {
-        userType = snapShott['userType'];
-      });
       setState(() {
         pageLoading = false;
       });
@@ -116,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<Map<String, dynamic>>> fetchBooksData(
       List<String> bookIds) async {
     log(bookIds.toString());
+    // ignore: no_leading_underscores_for_local_identifiers
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     List<Map<String, dynamic>> books = [];
 
@@ -228,38 +219,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                            userType == 'Reader'
-                                ? SizedBox(
-                                    height: 90.h,
-                                  )
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0,
-                                            right: 15.0,
-                                            top: 10,
-                                            bottom: 60),
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const ChatBotScreen(),
-                                                ));
-                                          },
-                                          child: CircleAvatar(
-                                            radius: 19.r,
-                                            backgroundImage: const AssetImage(
-                                              'assets/images/chatbot.png',
-                                            ),
-                                          ),
-                                        ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0,
+                                      right: 15.0,
+                                      top: 10,
+                                      bottom: 60),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ChatBotScreen(),
+                                          ));
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 19.r,
+                                      backgroundImage: const AssetImage(
+                                        'assets/images/chatbot.png',
                                       ),
-                                    ],
-                                  )
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       )
@@ -306,8 +293,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ));
                                     },
                                     child: Container(
-                                      height: 70.h,
-                                      width: 85.w,
+                                      height: 50.h,
+                                      width: 110.w,
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -323,8 +310,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           filters[index]['text'].toString(),
                                           style: GoogleFonts.poppins(
                                               color: cWhite,
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w600),
+                                              fontSize: 11.sp,
+                                              fontWeight: FontWeight.w800),
                                         ),
                                       )),
                                     ),
@@ -390,18 +377,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             color: cGreen));
                                   } else if (snapshot.hasError) {
                                     return const Center(child: Text('Error'));
-                                  }
-                                  if (snapshot.data!.isEmpty) {
-                                    return Center(
-                                      child: Text(
-                                        "No Books are added.",
-                                        style: GoogleFonts.inter(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    );
-                                  }
+                                  } 
+                                  booksData = fetchBooksData(snapshot.data!);
 
                                   return FutureBuilder<
                                       List<Map<String, dynamic>>>(

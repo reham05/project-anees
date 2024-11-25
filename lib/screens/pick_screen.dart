@@ -207,10 +207,10 @@ class _PickScreenState extends State<PickScreen> {
                       children: [
                         Expanded(
                           child: InterestsWidget(
-                            text: "Poetry",
-                            image: "assets/images/poetry.png",
-                            isSelected: selectedInterests.contains("Poetry"),
-                            onChanged: () => toggleInterest("Poetry"),
+                            text: "Fiction",
+                            image: "assets/images/fiction.png",
+                            isSelected: selectedInterests.contains("Fiction"),
+                            onChanged: () => toggleInterest("Fiction"),
                           ),
                         ),
                         SizedBox(width: 5.w),
@@ -229,19 +229,19 @@ class _PickScreenState extends State<PickScreen> {
                       children: [
                         Expanded(
                           child: InterestsWidget(
-                            text: "Fantacy",
-                            image: "assets/images/fantacy.png",
-                            isSelected: selectedInterests.contains("Fantacy"),
-                            onChanged: () => toggleInterest("Fantacy"),
+                            text: "Biography",
+                            image: "assets/images/biography.png",
+                            isSelected: selectedInterests.contains("Biography"),
+                            onChanged: () => toggleInterest("Biography"),
                           ),
                         ),
                         SizedBox(width: 5.w),
                         Expanded(
                           child: InterestsWidget(
-                            text: "Detective",
-                            image: "assets/images/detective.png",
-                            isSelected: selectedInterests.contains("Detective"),
-                            onChanged: () => toggleInterest("Detective"),
+                            text: "Health",
+                            image: "assets/images/health.png",
+                            isSelected: selectedInterests.contains("Health"),
+                            onChanged: () => toggleInterest("Health"),
                           ),
                         ),
                       ],
@@ -251,19 +251,19 @@ class _PickScreenState extends State<PickScreen> {
                       children: [
                         Expanded(
                           child: InterestsWidget(
-                            text: "English",
-                            image: "assets/images/english.png",
-                            isSelected: selectedInterests.contains("English"),
-                            onChanged: () => toggleInterest("English"),
+                            text: "Literary Criticism",
+                            image: "assets/images/literay-criticism.png",
+                            isSelected: selectedInterests.contains("Literary Criticism"),
+                            onChanged: () => toggleInterest("Literary Criticism"),
                           ),
                         ),
                         SizedBox(width: 5.w),
                         Expanded(
                           child: InterestsWidget(
-                            text: "Arabic",
-                            image: "assets/images/arabic.png",
-                            isSelected: selectedInterests.contains("Arabic"),
-                            onChanged: () => toggleInterest("Arabic"),
+                            text: "Social Science",
+                            image: "assets/images/english.png",
+                            isSelected: selectedInterests.contains("Social Science"),
+                            onChanged: () => toggleInterest("Social Science"),
                           ),
                         ),
                       ],
@@ -282,11 +282,11 @@ class _PickScreenState extends State<PickScreen> {
                         SizedBox(width: 5.w),
                         Expanded(
                           child: InterestsWidget(
-                            text: "Technology",
-                            image: "assets/images/technology.png",
+                            text: "Science",
+                            image: "assets/images/Science.png",
                             isSelected:
-                                selectedInterests.contains("Technology"),
-                            onChanged: () => toggleInterest("Technology"),
+                                selectedInterests.contains("Science"),
+                            onChanged: () => toggleInterest("Science"),
                           ),
                         ),
                       ],
