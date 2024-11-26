@@ -102,9 +102,12 @@ class _PickScreenState extends State<PickScreen> {
             children: [
               Stack(
                 children: [
-                  SvgPicture.asset(
-                    'assets/images/Ellipse-pick.svg',
-                    fit: BoxFit.fill,
+                  SizedBox(
+                    width: double.infinity,
+                    child: SvgPicture.asset(
+                      'assets/images/Ellipse-pick.svg',
+                      fit: BoxFit.fill,
+                    ),
                   ),
                   Positioned(
                     bottom: 25.h,
@@ -136,7 +139,7 @@ class _PickScreenState extends State<PickScreen> {
                   ),
                   Positioned(
                     bottom: 55.h,
-                    right: 40.w,
+                    right: 25.w,
                     child: SvgPicture.asset(
                       'assets/images/Ellipse-05.svg',
                       fit: BoxFit.fill,
@@ -153,10 +156,10 @@ class _PickScreenState extends State<PickScreen> {
                     ),
                   ),
                   Positioned(
-                    top: 10.h,
-                    bottom: 30.h,
-                    left: 50.w,
-                    right: 50.w,
+                    top: 31.h,
+                    bottom: 28.h,
+                    left: 65.w,
+                    right: 45.w,
                     child: SafeArea(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +205,7 @@ class _PickScreenState extends State<PickScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 30.h),
                     Row(
                       children: [
                         Expanded(
@@ -253,8 +256,10 @@ class _PickScreenState extends State<PickScreen> {
                           child: InterestsWidget(
                             text: "Literary Criticism",
                             image: "assets/images/literay-criticism.png",
-                            isSelected: selectedInterests.contains("Literary Criticism"),
-                            onChanged: () => toggleInterest("Literary Criticism"),
+                            isSelected: selectedInterests
+                                .contains("Literary Criticism"),
+                            onChanged: () =>
+                                toggleInterest("Literary Criticism"),
                           ),
                         ),
                         SizedBox(width: 5.w),
@@ -262,7 +267,8 @@ class _PickScreenState extends State<PickScreen> {
                           child: InterestsWidget(
                             text: "Social Science",
                             image: "assets/images/english.png",
-                            isSelected: selectedInterests.contains("Social Science"),
+                            isSelected:
+                                selectedInterests.contains("Social Science"),
                             onChanged: () => toggleInterest("Social Science"),
                           ),
                         ),
@@ -284,8 +290,7 @@ class _PickScreenState extends State<PickScreen> {
                           child: InterestsWidget(
                             text: "Science",
                             image: "assets/images/Science.png",
-                            isSelected:
-                                selectedInterests.contains("Science"),
+                            isSelected: selectedInterests.contains("Science"),
                             onChanged: () => toggleInterest("Science"),
                           ),
                         ),

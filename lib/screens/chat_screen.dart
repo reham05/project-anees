@@ -47,12 +47,15 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Stack(
               children: [
-                SvgPicture.asset(
-                  'assets/images/Ellipse-chat.svg',
-                  fit: BoxFit.fill,
+                SizedBox(
+                  width: double.infinity,
+                  child: SvgPicture.asset(
+                    'assets/images/Ellipse-chat.svg',
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 Positioned(
-                    left: 132.w,
+                    left: 150.w,
                     right: 40.w,
                     top: 40.h,
                     child: SafeArea(
@@ -61,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       style: GoogleFonts.aclonica(
                           fontWeight: FontWeight.bold,
                           color: cGreen,
-                          fontSize: 18.sp),
+                          fontSize: 20.sp),
                     ))),
                 Positioned(
                     left: 0.w,
@@ -71,8 +74,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       fit: BoxFit.fill,
                     )),
                 Positioned(
-                    left: 50.w,
-                    top: 95.h,
+                    left: 70.w,
+                    top: 85.h,
                     child: SvgPicture.asset(
                       "assets/images/Ellipse-002.svg",
                       fit: BoxFit.fill,
@@ -329,7 +332,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     Row(
                                                       children: [
                                                         CircleAvatar(
-                                                          backgroundColor: cGreen2,
+                                                          backgroundColor:
+                                                              cGreen2,
                                                           radius: 22.r,
                                                           backgroundImage:
                                                               NetworkImage(
@@ -454,7 +458,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       Row(
                                                         children: [
                                                           CircleAvatar(
-                                                            backgroundColor: cGreen2,
+                                                            backgroundColor:
+                                                                cGreen2,
                                                             radius: 22.r,
                                                             backgroundImage:
                                                                 NetworkImage(
@@ -579,7 +584,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       Row(
                                                         children: [
                                                           CircleAvatar(
-                                                            backgroundColor: cGreen2,
+                                                            backgroundColor:
+                                                                cGreen2,
                                                             radius: 22.r,
                                                             backgroundImage:
                                                                 NetworkImage(

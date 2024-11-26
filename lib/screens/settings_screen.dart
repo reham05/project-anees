@@ -133,7 +133,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+                      builder: (context) => const LoginScreen(
+                        formLogout: true,
+                      ),
                     ),
                     (route) => false,
                   );

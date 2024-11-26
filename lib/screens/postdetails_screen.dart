@@ -73,6 +73,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       backgroundColor: cGreen4,
       appBar: AppBar(
         backgroundColor: cGreen4,
+        toolbarHeight: 70.h,
         title: Text("Post Details", style: GoogleFonts.aclonica()),
         centerTitle: true,
         leading: IconButton(

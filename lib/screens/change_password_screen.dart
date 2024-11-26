@@ -100,6 +100,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
+        toolbarHeight: 70.h,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -109,9 +110,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               color: cWhite,
             )),
         backgroundColor: cGreen,
-        title: Text(
-          "Change Password",
-          style: GoogleFonts.aclonica(color: Colors.white, fontSize: 18.sp),
+        title: Column(
+          children: [
+            SizedBox(
+              height: 4.h,
+            ),
+            Text(
+              "Change Password",
+              style: GoogleFonts.aclonica(color: Colors.white, fontSize: 21.sp),
+            ),
+          ],
         ),
         centerTitle: true,
       ),

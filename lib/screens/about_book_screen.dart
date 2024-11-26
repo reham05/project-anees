@@ -137,6 +137,9 @@ class _AboutBookScreenState extends State<AboutBookScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          SizedBox(
+                            height: 20.h,
+                          ),
                           Center(
                             child: Container(
                                 height: 200.h,
@@ -154,14 +157,15 @@ class _AboutBookScreenState extends State<AboutBookScreen> {
                           Text(
                             widget.book!['title'],
                             style: GoogleFonts.inter(
-                                color: cGreen,
-                                fontWeight: FontWeight.bold),
+                                color: cGreen, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             widget.book!['authorName'],
                             style: GoogleFonts.inter(
-                                color: Colors.grey.shade600,
-                                fontWeight: FontWeight.w200),
+                                color: cGreen, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 6.h,
                           ),
                           TextButton(
                               style: const ButtonStyle(

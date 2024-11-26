@@ -268,12 +268,15 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                     height: 210.h,
                     child: Stack(
                       children: [
-                        Positioned(
-                          top: -20.h,
-                          left: -15.w,
-                          child: SvgPicture.asset(
-                            'assets/images/Ellipse-author-profile.svg',
-                            fit: BoxFit.fill,
+                        SizedBox(
+                          width: double.infinity,
+                          child: Positioned(
+                            top: -20.h,
+                            left: -15.w,
+                            child: SvgPicture.asset(
+                              'assets/images/Ellipse-author-profile.svg',
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                         SafeArea(
@@ -304,7 +307,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                                     color: Colors.white,
                                     letterSpacing: 1.5,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 15.sp,
+                                    fontSize: 20.sp,
                                     fontStyle: FontStyle.italic),
                               ),
                               Text(
@@ -388,6 +391,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: Container(
+                            height: 50.h,
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             decoration: BoxDecoration(
                               color: cGreen2,
@@ -396,6 +400,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                             child: Row(
                               children: [
                                 Expanded(
+                                  flex: 2,
                                   child: TextField(
                                     controller: _controller,
                                     onTap: () {
@@ -405,15 +410,17 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                                     focusNode: _focusNode,
                                     cursorColor: Colors.black,
                                     style: const TextStyle(color: Colors.black),
-                                    decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
                                         // vertical: 12,
                                         horizontal: 12,
                                       ),
                                       hintText: 'Type your message here...',
                                       hintStyle: TextStyle(
                                           color: Colors.black45,
-                                          fontStyle: FontStyle.italic),
+                                          fontStyle: FontStyle.italic,
+                                          fontSize: 15.sp),
                                       border: InputBorder.none,
                                     ),
                                   ),

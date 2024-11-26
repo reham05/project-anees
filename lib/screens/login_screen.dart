@@ -22,8 +22,8 @@ import 'upload_personal_image_screen.dart';
 import 'user_role_selection_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
+  const LoginScreen({super.key, this.formLogout = false});
+  final bool formLogout;
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -121,17 +121,22 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.black,
-                      )),
+                SizedBox(
+                  height: 10.h,
                 ),
+                widget.formLogout == false
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.black,
+                            )),
+                      )
+                    : const SizedBox.shrink(),
                 Center(
                   child: Text(
                     "Log In",

@@ -69,7 +69,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(360, 690),
+        // designSize: const Size(360, 690),
+        designSize: const Size(411, 823),
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
@@ -79,7 +80,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 useMaterial3: true,
               ),
-              home: const Home());
+              home: const SplashScreen());
         });
   }
 }

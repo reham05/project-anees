@@ -20,9 +20,10 @@ class _ViewBooksWithFilterState extends State<ViewBooksWithFilter> {
         backgroundColor: cWhite,
         appBar: AppBar(
           backgroundColor: cGreen,
+          toolbarHeight: 70.h,
           title: Text(
             widget.category.toString(),
-            style: GoogleFonts.aclonica(color: Colors.white),
+            style: GoogleFonts.aclonica(color: Colors.white, fontSize: 22.sp),
           ),
           leading: IconButton(
               onPressed: () {
@@ -77,6 +78,7 @@ class _ViewBooksWithFilterState extends State<ViewBooksWithFilter> {
                           ));
                     },
                     child: Container(
+                      height: 135.h,
                       decoration: BoxDecoration(
                         color: cGreen4,
                         borderRadius: BorderRadius.circular(15),
@@ -84,13 +86,13 @@ class _ViewBooksWithFilterState extends State<ViewBooksWithFilter> {
                       child: Column(
                         children: [
                           Container(
-                            height: 130.h,
+                            height: 150.h,
                             decoration: BoxDecoration(
                               color: cGreen4,
                               borderRadius: BorderRadius.circular(15),
                               image: DecorationImage(
                                 image: NetworkImage(book['urlBookCover']),
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),
@@ -122,7 +124,6 @@ class _ViewBooksWithFilterState extends State<ViewBooksWithFilter> {
                       ),
                     ),
                   );
-               
                 },
               );
             },

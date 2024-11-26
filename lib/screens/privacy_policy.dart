@@ -13,6 +13,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
       backgroundColor: cWhite,
       appBar: AppBar(
         backgroundColor: cGreen,
+        toolbarHeight: 70.h,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -23,14 +24,21 @@ class PrivacyPolicyScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'Privacy Policy',
-          style: TextStyle(
-            fontFamily: "Nizar",
-            color: cWhite,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Column(
+          children: [
+            SizedBox(
+              height: 4.h,
+            ),
+            Text(
+              'Privacy Policy',
+              style: TextStyle(
+                fontFamily: "Nizar",
+                color: cWhite,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         centerTitle: true,
       ),
@@ -170,7 +178,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'If you have any questions about this privacy policy, please contact us at: anees@anees.com.',
+                  'If you have any questions about this privacy policy, please contact us at: anees.cs100@gmail.com',
                   style: GoogleFonts.inter(fontSize: 13.sp),
                 ),
               ),

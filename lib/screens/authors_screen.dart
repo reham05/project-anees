@@ -23,9 +23,19 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
-        title: Text(
-          'Authors',
-          style: GoogleFonts.aclonica(),
+        toolbarHeight: 70.h,
+        title: Column(
+          children: [
+            SizedBox(
+              height: 4.h,
+            ),
+            Text(
+              'Authors',
+              style: GoogleFonts.aclonica(
+                fontSize: 22.sp,
+              ),
+            ),
+          ],
         ),
         centerTitle: true,
         leading: IconButton(

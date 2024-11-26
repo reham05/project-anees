@@ -11,6 +11,7 @@ class TermsConditionsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
+        toolbarHeight: 70.h,
         backgroundColor: cGreen,
         leading: IconButton(
           icon: Icon(
@@ -22,13 +23,20 @@ class TermsConditionsScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'Terms and Conditions',
-          style: GoogleFonts.inter(
-            color: cWhite,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Column(
+          children: [
+            SizedBox(
+              height: 4.h,
+            ),
+            Text(
+              'Terms and Conditions',
+              style: GoogleFonts.inter(
+                color: cWhite,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         centerTitle: true,
       ),
@@ -178,7 +186,7 @@ class TermsConditionsScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'If you have any questions regarding these terms or need assistance, please contact us via email at: anees@anees.com.',
+                  'If you have any questions regarding these terms or need assistance, please contact us via email at: anees.cs100@gmail.com',
                   style: GoogleFonts.inter(
                     fontSize: 13.sp,
                   ),

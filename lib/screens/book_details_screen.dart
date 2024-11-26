@@ -22,10 +22,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       backgroundColor: cWhite,
       body: Stack(
         children: [
-          SvgPicture.asset(
-            'assets/images/Ellipse-book.svg',
-            fit: BoxFit.fill,
-            // height: 300.h,
+          SizedBox(
+            width: double.infinity,
+            child: SvgPicture.asset(
+              'assets/images/Ellipse-book.svg',
+              fit: BoxFit.fill,
+              // height: 300.h,
+            ),
           ),
           SafeArea(
             child: Column(

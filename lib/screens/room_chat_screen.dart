@@ -53,6 +53,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
       backgroundColor: cWhite,
       appBar: AppBar(
         backgroundColor: cGreen2,
+        toolbarHeight: 70.h,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

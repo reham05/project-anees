@@ -114,21 +114,24 @@ class _NotificationScreenState extends State<NotificationScreen>
         children: [
           Stack(
             children: [
-              SvgPicture.asset(
-                'assets/images/Ellipse-chat.svg',
-                fit: BoxFit.fill,
+              SizedBox(
+                width: double.infinity,
+                child: SvgPicture.asset(
+                  'assets/images/Ellipse-chat.svg',
+                  fit: BoxFit.fill,
+                ),
               ),
               Positioned(
-                  left: 120.w,
+                  left: 140.w,
                   right: 40.w,
-                  top: 45.h,
+                  top: 40.h,
                   child: SafeArea(
                       child: Text(
                     "Notifications",
                     style: GoogleFonts.aclonica(
                         fontWeight: FontWeight.bold,
                         color: cGreen,
-                        fontSize: 18.sp),
+                        fontSize: 20.sp),
                   ))),
               Positioned(
                   left: 0.w,
@@ -138,8 +141,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                     fit: BoxFit.fill,
                   )),
               Positioned(
-                  left: 50.w,
-                  top: 95.h,
+                  left: 60.w,
+                  top: 85.h,
                   child: SvgPicture.asset(
                     "assets/images/Ellipse-002.svg",
                     fit: BoxFit.fill,

@@ -189,6 +189,9 @@ class _MultiCollectionSearchPageState extends State<MultiCollectionSearchPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 25.h,
+                ),
                 Row(
                   children: [
                     IconButton(

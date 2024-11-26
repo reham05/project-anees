@@ -120,9 +120,10 @@ class _PostsScreenState extends State<PostsScreen> {
       backgroundColor: cGreen4,
       appBar: AppBar(
         backgroundColor: cGreen4,
+        toolbarHeight: 70.h,
         title: Text(
           "Posts",
-          style: GoogleFonts.aclonica(fontSize: 18.sp),
+          style: GoogleFonts.aclonica(fontSize: 20.sp),
         ),
         centerTitle: true,
       ),

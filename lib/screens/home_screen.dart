@@ -28,7 +28,10 @@ const filters = [
   {'image': "assets/images/business.png", 'text': "Business"},
   {'image': "assets/images/biography.png", 'text': "Biography"},
   {'image': "assets/images/health.png", 'text': "Health"},
-  {'image': "assets/images/literay-criticism.png", 'text': "Literary Criticism"},
+  {
+    'image': "assets/images/literay-criticism.png",
+    'text': "Literary Criticism"
+  },
   {'image': "assets/images/english.png", 'text': "Social Science"},
   {'image': "assets/images/history.png", 'text': "History"},
   {'image': "assets/images/Science.png", 'text': "Science"},
@@ -48,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Map<String, dynamic> recommendBooks;
   late Future<List<String>> recommendedBookIds;
   late Future<List<Map<String, dynamic>>> booksData;
-
+  late String? userType;
   @override
   void initState() {
     super.initState();
@@ -71,6 +74,14 @@ class _HomeScreenState extends State<HomeScreen> {
       List<String> interests =
           List<String>.from(convertedInterestsData['interests'] ?? []);
       List<String> recommendedBookIds = await sendInterestsToModel(interests);
+      final snapShott = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+      final userD = snapShott.data();
+      setState(() {
+        userType = snapShott['userType'];
+      });
       setState(() {
         pageLoading = false;
       });
@@ -159,22 +170,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Positioned(
-                        top: 146.h,
-                        left: 10.w,
+                        top: 133.h,
+                        left: 15.w,
                         child: SvgPicture.asset(
                           'assets/images/Ellipse-02.svg',
                         ),
                       ),
                       Positioned(
                         top: 0.h,
-                        left: 170.w,
+                        left: 160.w,
                         child: SvgPicture.asset(
                           'assets/images/Ellipse-03.svg',
                         ),
                       ),
                       Positioned(
-                        top: 50.h,
-                        left: 30.w,
+                        top: 38.h,
+                        left: 23.w,
                         child: Column(
                           children: [
                             Text(
@@ -219,34 +230,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15.0,
-                                      right: 15.0,
-                                      top: 10,
-                                      bottom: 60),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ChatBotScreen(),
-                                          ));
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 19.r,
-                                      backgroundImage: const AssetImage(
-                                        'assets/images/chatbot.png',
+                            userType == 'Reader'
+                                ? SizedBox(
+                                    height: 90.h,
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 15.0,
+                                            right: 15.0,
+                                            top: 10,
+                                            bottom: 60),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const ChatBotScreen(),
+                                                ));
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 19.r,
+                                            backgroundImage: const AssetImage(
+                                              'assets/images/chatbot.png',
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
+                                    ],
+                                  )
                           ],
                         ),
                       )
@@ -323,6 +338,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 itemCount: filters.length),
                           ),
                         ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Row(
@@ -363,6 +381,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SizedBox(
@@ -377,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             color: cGreen));
                                   } else if (snapshot.hasError) {
                                     return const Center(child: Text('Error'));
-                                  } 
+                                  }
                                   booksData = fetchBooksData(snapshot.data!);
 
                                   return FutureBuilder<
@@ -483,6 +504,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }),
                           ),
                         ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Row(
@@ -519,6 +543,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),

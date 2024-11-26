@@ -199,9 +199,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Stack(
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/Ellipse-author-profile.svg',
-                      fit: BoxFit.fill,
+                    SizedBox(
+                      width: double.infinity,
+                      child: SvgPicture.asset(
+                        'assets/images/Ellipse-author-profile.svg',
+                        fit: BoxFit.fill,
+                      ),
                     ),
                     Container(
                       color: cGreen4,
@@ -209,15 +212,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       width: double.infinity,
                     ),
                     Positioned(
-                      left: 50.w,
+                      left: 55.w,
                       right: 50.w,
-                      top: 15.h,
+                      top: 23.h,
                       child: SafeArea(
                         child: Column(
                           children: [
                             Container(
-                              width: 120.w,
-                              height: 120.h,
+                              width: 115.w,
+                              height: 100.h,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -542,15 +545,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ));
                                           },
                                           child: Container(
+                                            height: 140.h,
                                             decoration: BoxDecoration(
                                               color: cGreen4,
                                               borderRadius:
                                                   BorderRadius.circular(15),
                                             ),
                                             child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  height: 135.h,
+                                                  height: 160.h,
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -558,7 +564,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     image: DecorationImage(
                                                       image: NetworkImage(
                                                           book['urlBookCover']),
-                                                      fit: BoxFit.cover,
+                                                      fit: BoxFit.fill,
                                                     ),
                                                   ),
                                                 ),
@@ -571,7 +577,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     maxLines: 1,
                                                     style: GoogleFonts.inter(
                                                       color: cGreen,
-                                                      fontSize: 9.sp,
+                                                      fontSize: 12.sp,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     ),
@@ -658,6 +664,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     ));
                                               },
                                               child: Container(
+                                                height: 140.h,
                                                 decoration: BoxDecoration(
                                                   color: cGreen4,
                                                   borderRadius:
@@ -666,7 +673,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 child: Column(
                                                   children: [
                                                     Container(
-                                                      height: 135.h,
+                                                      height: 160.h,
                                                       decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius

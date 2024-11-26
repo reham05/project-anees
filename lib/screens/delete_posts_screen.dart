@@ -80,9 +80,17 @@ class _DeletePostsScreenState extends State<DeletePostsScreen> {
       backgroundColor: cGreen4,
       appBar: AppBar(
         backgroundColor: cGreen4,
-        title: Text(
-          "My Posts",
-          style: GoogleFonts.aclonica(fontSize: 18.sp),
+        toolbarHeight: 70.h,
+        title: Column(
+          children: [
+            SizedBox(
+              height: 6.h,
+            ),
+            Text(
+              "My Posts",
+              style: GoogleFonts.aclonica(fontSize: 22.sp),
+            ),
+          ],
         ),
         centerTitle: true,
         leading: IconButton(

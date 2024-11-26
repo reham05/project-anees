@@ -18,11 +18,21 @@ class _EventdetailsScreenState extends State<EventdetailsScreen> {
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
+        toolbarHeight: 70.h,
         backgroundColor: cGreen,
-        title: Text(
-          "Details",
-          style: GoogleFonts.aclonica(
-              color: cWhite, fontWeight: FontWeight.bold, fontSize: 20.sp),
+        centerTitle: true,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 3.h,
+            ),
+            Text(
+              "Details",
+              style: GoogleFonts.aclonica(
+                  color: cWhite, fontWeight: FontWeight.bold, fontSize: 22.sp),
+            ),
+          ],
         ),
         leading: IconButton(
             onPressed: () {
@@ -156,7 +166,7 @@ class _EventdetailsScreenState extends State<EventdetailsScreen> {
                     fontWeight: FontWeight.w500,
                     fontSize: 13.sp),
               ),
-                 Text(
+              Text(
                 "Language:",
                 style: GoogleFonts.inter(
                     color: Colors.grey.shade500,
@@ -184,7 +194,6 @@ class _EventdetailsScreenState extends State<EventdetailsScreen> {
                     fontWeight: FontWeight.w500,
                     fontSize: 13.sp),
               ),
-           
             ],
           ),
         ),

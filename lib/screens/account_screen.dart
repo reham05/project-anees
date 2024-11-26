@@ -78,9 +78,7 @@ class _AccountScreenState extends State<AccountScreen> {
     if (pickedImage != null) {
       final croppedImage = await ImageCropper().cropImage(
         sourcePath: pickedImage.path,
-        aspectRatio:
-            const CropAspectRatio(ratioX: 1, ratioY: 1), 
-
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Crop Image',
@@ -109,8 +107,7 @@ class _AccountScreenState extends State<AccountScreen> {
     if (pickedImage != null) {
       final croppedImage = await ImageCropper().cropImage(
         sourcePath: pickedImage.path,
-        aspectRatio: const CropAspectRatio(
-            ratioX: 1, ratioY: 1), 
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Crop Image',
@@ -443,6 +440,7 @@ class _AccountScreenState extends State<AccountScreen> {
       child: Scaffold(
         backgroundColor: cWhite,
         appBar: AppBar(
+          toolbarHeight: 70.h,
           backgroundColor: cWhite,
           title: Text(
             "My Account",
@@ -489,8 +487,8 @@ class _AccountScreenState extends State<AccountScreen> {
                               )),
                               // Camera icon overlay
                               Positioned(
-                                  bottom: 5,
-                                  right: 128.w,
+                                  bottom: 2,
+                                  right: 155.w,
                                   child: CircleAvatar(
                                     radius: 15.r,
                                     backgroundColor: Colors.grey[300],
@@ -526,7 +524,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                 
                                   Text(
                                     "  Name",
                                     style: GoogleFonts.inter(
@@ -724,7 +721,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                         if (_formKey.currentState!.validate()) {
                                           _updateUserData(
                                               fullName: _fullName.text,
-                                          
                                               city: _selectedCity!,
                                               region: _selectedRegion!);
                                         }

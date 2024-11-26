@@ -85,6 +85,7 @@ class _DeleteBooksScreenState extends State<DeleteBooksScreen> {
                     child: Stack(
                       children: [
                         Container(
+                          height: 170.h,
                           decoration: BoxDecoration(
                             color: cGreen4,
                             borderRadius: BorderRadius.circular(15),
@@ -92,12 +93,12 @@ class _DeleteBooksScreenState extends State<DeleteBooksScreen> {
                           child: Column(
                             children: [
                               Container(
-                                height: 135.h,
+                                height: 140.h,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   image: DecorationImage(
                                     image: NetworkImage(book['urlBookCover']),
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
                               ),
@@ -109,7 +110,7 @@ class _DeleteBooksScreenState extends State<DeleteBooksScreen> {
                                   maxLines: 1,
                                   style: GoogleFonts.inter(
                                     color: cGreen,
-                                    fontSize: 9.sp,
+                                    fontSize: 12.sp,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -121,8 +122,7 @@ class _DeleteBooksScreenState extends State<DeleteBooksScreen> {
                           style: const ButtonStyle(
                               backgroundColor: WidgetStatePropertyAll(cGreen4)),
                           onPressed: () {
-                            FirestoreMethod()
-                                .deleteBooks(bookMap: book);
+                            FirestoreMethod().deleteBooks(bookMap: book);
                           },
                           icon: Icon(
                             Icons.delete,
